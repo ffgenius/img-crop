@@ -1,0 +1,22 @@
+{
+  "name": "playground",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vue-tsc -b && vp build",
+    "dev": "vp dev",
+    "preview": "vp preview"
+  },
+  "dependencies": {
+    "vue": "catalog:vue",
+    "vue-easy-crop": "workspace:*"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "catalog:vue",
+    "@vue/tsconfig": "catalog:vue",
+    "vite": "catalog:tooling",
+    "vite-plus": "catalog:tooling",
+    "vue-tsc": "catalog:vue"
+  }
+}

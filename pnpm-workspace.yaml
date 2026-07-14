@@ -1,0 +1,37 @@
+packages:
+  - packages/*
+  - playground
+allowBuilds:
+  esbuild: false
+  simple-git-hooks: false
+catalogs:
+  testing:
+    '@playwright/test': ^1.61.1
+    playwright: ^1.61.1
+    vitest: npm:@voidzero-dev/vite-plus-test@latest
+  tooling:
+    normalize-wheel: ^1.0.1
+    simple-git-hooks: ^2.13.1
+    tsx: ^4.22.3
+    turbo: ^2.9.15
+    typescript: ^6.0.3
+    vite: npm:@voidzero-dev/vite-plus-core@latest
+    vite-plus: latest
+  types:
+    '@types/node': ^26.0.1
+  vue:
+    '@vitejs/plugin-vue': ^6.0.7
+    '@vue/tsconfig': ^0.9.1
+    unplugin-vue: ^7.2.0
+    vue: ^3.5.35
+    vue-tsc: ^3.3.2
+overrides:
+  vite: 'catalog:tooling'
+  vitest: 'catalog:testing'
+peerDependencyRules:
+  allowAny:
+    - vite
+    - vitest
+  allowedVersions:
+    vite: '*'
+    vitest: '*'

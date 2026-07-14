@@ -1,0 +1,46 @@
+{
+  "name": "vue-easy-crop",
+  "version": "1.0.0",
+  "description": "A Vue 3 component to crop images/videos with easy interactions",
+  "keywords": [
+    "vue",
+    "crop",
+    "cropper",
+    "image crop",
+    "vue3"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "vp pack",
+    "dev": "vp pack -w",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:all": "vitest run && playwright test"
+  },
+  "peerDependencies": {
+    "vue": ">=3.0.0"
+  },
+  "dependencies": {
+    "normalize-wheel": "catalog:tooling"
+  },
+  "devDependencies": {
+    "@playwright/test": "catalog:testing",
+    "@vitejs/plugin-vue": "catalog:vue",
+    "playwright": "catalog:testing",
+    "unplugin-vue": "catalog:vue",
+    "vitest": "catalog:testing",
+    "vue": "catalog:vue",
+    "vue-tsc": "catalog:vue"
+  }
+}
