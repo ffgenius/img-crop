@@ -9,8 +9,11 @@
     "preview": "vp preview"
   },
   "dependencies": {
+    "antdv-next": "catalog:tooling",
+    "antdv-next-img-crop": "workspace:*",
     "vue": "catalog:vue",
-    "vue-easy-crop": "workspace:*"
+    "vue-easy-crop": "workspace:*",
+    "vue-router": "catalog:vue"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "catalog:vue",
