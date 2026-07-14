@@ -1,0 +1,44 @@
+{
+  "name": "antdv-next-img-crop",
+  "version": "1.0.0",
+  "description": "An image cropper for Ant Design Vue Next Upload",
+  "keywords": [
+    "ant-design-vue",
+    "antdv-next",
+    "crop",
+    "cropper",
+    "image",
+    "upload",
+    "vue"
+  ],
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "vp pack",
+    "dev": "vp pack -w"
+  },
+  "dependencies": {
+    "vue-easy-crop": "workspace:*"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "catalog:vue",
+    "unplugin-vue": "catalog:vue",
+    "vue": "catalog:vue",
+    "vue-tsc": "catalog:vue"
+  },
+  "peerDependencies": {
+    "antdv-next": "*",
+    "vue": ">=3.0.0"
+  }
+}
