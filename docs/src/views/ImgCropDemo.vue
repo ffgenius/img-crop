@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { ImgCrop } from '@antdv-next/img-crop'
 import { Upload, Button } from 'antdv-next'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+
+import { useI18n } from '../i18n'
+
+const { t } = useI18n()
 
 // --- Demo configuration ---
 const quality = ref(0.8)
@@ -13,12 +17,12 @@ const aspectSlider = ref(true)
 const showReset = ref(true)
 const aspect = ref(4 / 3)
 
-const aspectOptions = [
-  { label: '自由比例', value: 4 / 3 },
-  { label: '1:1 (正方形)', value: 1 },
-  { label: '16:9 (宽屏)', value: 16 / 9 },
-  { label: '3:4 (纵向)', value: 3 / 4 },
-]
+const aspectOptions = computed(() => [
+  { label: t('demo.imgCrop.aspectOpt.free'), value: 4 / 3 },
+  { label: t('demo.imgCrop.aspectOpt.1:1'), value: 1 },
+  { label: t('demo.imgCrop.aspectOpt.16:9'), value: 16 / 9 },
+  { label: t('demo.imgCrop.aspectOpt.3:4'), value: 3 / 4 },
+])
 
 // --- State ---
 const croppedImageUrl = ref<string | null>(null)
@@ -35,10 +39,9 @@ function handleModalOk(result: unknown) {
 }
 
 function handleModalCancel() {
-  addLog('modal-cancel: 用户取消了裁剪')
+  addLog(t('demo.imgCrop.cancelLog'))
 }
 
-// beforeUpload: 拦截裁剪后的文件，生成预览
 function handleBeforeUpload(file: File & { uid?: string }) {
   addLog(`beforeUpload: ${file.name} (${(file.size / 1024).toFixed(1)} KB)`)
 
@@ -46,15 +49,13 @@ function handleBeforeUpload(file: File & { uid?: string }) {
   croppedImageUrl.value = url
   croppedFileName.value = file.name
 
-  // 返回 false 阻止实际上传，仅用于演示
   return false
 }
 
-// beforeCrop: 裁剪前检查
 function handleBeforeCrop(file: File & { uid?: string }) {
   const isValid = file.type.startsWith('image/')
   if (!isValid) {
-    addLog(`beforeCrop: 拒绝非图片文件 "${file.name}"`)
+    addLog(`beforeCrop: ${t('demo.imgCrop.cancelLog').split(': ')[1]}`)
   }
   return isValid
 }
@@ -64,11 +65,11 @@ function handleBeforeCrop(file: File & { uid?: string }) {
   <div class="demo-app">
     <!-- Control Panel -->
     <aside class="control-panel">
-      <h2>antdv-next-img-crop 演示</h2>
+      <h2>{{ t('demo.imgCrop.title') }}</h2>
 
       <!-- Upload area -->
       <div class="control-group">
-        <label>上传图片</label>
+        <label>{{ t('demo.imgCrop.upload') }}</label>
         <ImgCrop
           :quality="quality"
           :crop-shape="cropShape"
@@ -83,14 +84,16 @@ function handleBeforeCrop(file: File & { uid?: string }) {
           @modal-cancel="handleModalCancel"
         >
           <Upload :before-upload="handleBeforeUpload" :show-upload-list="false">
-            <Button type="primary" class="upload-btn"> 选择图片并裁剪 </Button>
+            <Button type="primary" class="upload-btn">
+              {{ t('demo.imgCrop.uploadBtn') }}
+            </Button>
           </Upload>
         </ImgCrop>
       </div>
 
       <!-- Quality -->
       <div class="control-group">
-        <label>输出质量：{{ quality }}</label>
+        <label>{{ t('demo.imgCrop.quality') }}：{{ quality }}</label>
         <input
           type="range"
           :value="quality"
@@ -103,7 +106,7 @@ function handleBeforeCrop(file: File & { uid?: string }) {
 
       <!-- Aspect ratio -->
       <div class="control-group">
-        <label>裁剪比例</label>
+        <label>{{ t('demo.imgCrop.aspect') }}</label>
         <div class="aspect-buttons">
           <button
             v-for="opt in aspectOptions"
@@ -118,48 +121,53 @@ function handleBeforeCrop(file: File & { uid?: string }) {
 
       <!-- Crop shape -->
       <div class="control-group">
-        <label>裁剪形状</label>
+        <label>{{ t('demo.imgCrop.cropShape') }}</label>
         <div class="aspect-buttons">
           <button
             :class="{ active: cropShape === 'rect' }"
             @click="cropShape = 'rect'"
           >
-            矩形
+            {{ t('demo.imgCrop.shape.rect') }}
           </button>
           <button
             :class="{ active: cropShape === 'round' }"
             @click="cropShape = 'round'"
           >
-            圆形
+            {{ t('demo.imgCrop.shape.round') }}
           </button>
         </div>
       </div>
 
       <!-- Toggles -->
       <div class="control-group">
-        <label>功能开关</label>
+        <label>{{ t('demo.imgCrop.toggles') }}</label>
         <div class="toggle-list">
           <label class="toggle-item">
-            <input type="checkbox" v-model="zoomSlider" /> 缩放滑块
+            <input type="checkbox" v-model="zoomSlider" />
+            {{ t('demo.imgCrop.toggle.zoom') }}
           </label>
           <label class="toggle-item">
-            <input type="checkbox" v-model="rotationSlider" /> 旋转滑块
+            <input type="checkbox" v-model="rotationSlider" />
+            {{ t('demo.imgCrop.toggle.rotation') }}
           </label>
           <label class="toggle-item">
-            <input type="checkbox" v-model="aspectSlider" /> 宽高比滑块
+            <input type="checkbox" v-model="aspectSlider" />
+            {{ t('demo.imgCrop.toggle.aspect') }}
           </label>
           <label class="toggle-item">
-            <input type="checkbox" v-model="showGrid" /> 显示网格
+            <input type="checkbox" v-model="showGrid" />
+            {{ t('demo.imgCrop.toggle.grid') }}
           </label>
           <label class="toggle-item">
-            <input type="checkbox" v-model="showReset" /> 显示重置按钮
+            <input type="checkbox" v-model="showReset" />
+            {{ t('demo.imgCrop.toggle.reset') }}
           </label>
         </div>
       </div>
 
       <!-- Preview -->
       <div class="control-group" v-if="croppedImageUrl">
-        <label>裁剪结果预览</label>
+        <label>{{ t('demo.imgCrop.preview') }}</label>
         <div class="preview-box">
           <img :src="croppedImageUrl" :alt="croppedFileName" />
         </div>
@@ -169,9 +177,11 @@ function handleBeforeCrop(file: File & { uid?: string }) {
 
     <!-- Log panel -->
     <div class="log-panel">
-      <h2>事件日志</h2>
+      <h2>{{ t('demo.imgCrop.eventLog') }}</h2>
       <div class="log-list">
-        <div v-if="modalLog.length === 0" class="log-empty">等待操作...</div>
+        <div v-if="modalLog.length === 0" class="log-empty">
+          {{ t('demo.imgCrop.waiting') }}
+        </div>
         <div v-for="(msg, i) in modalLog" :key="i" class="log-item">
           {{ msg }}
         </div>

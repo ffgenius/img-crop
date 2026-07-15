@@ -6,10 +6,10 @@ A monorepo of Vue 3 image cropping solutions built with **pnpm workspaces** and 
 
 ## 📦 Packages
 
-| Package | Description |
-|---------|-------------|
+| Package                                                 | Description                                                      |
+| ------------------------------------------------------- | ---------------------------------------------------------------- |
 | [`@antdv-next/vue-easy-crop`](./packages/vue-easy-crop) | Framework-agnostic Vue 3 cropper component for images and videos |
-| [`@antdv-next/img-crop`](./packages/img-crop) | Image cropper integrated with antdv-next Upload component |
+| [`@antdv-next/img-crop`](./packages/img-crop)           | Image cropper integrated with antdv-next Upload component        |
 
 ## ✨ Features
 
@@ -41,13 +41,13 @@ pnpm --filter docs dev
 
 ## 🛠️ Scripts
 
-| Command | Description |
-|---------|-------------|
-| `pnpm dev` | Start all packages in dev mode |
-| `pnpm build` | Build all packages |
-| `pnpm lint` | Lint all packages |
-| `pnpm format` | Format all packages |
-| `pnpm test` | Run tests |
+| Command       | Description                    |
+| ------------- | ------------------------------ |
+| `pnpm dev`    | Start all packages in dev mode |
+| `pnpm build`  | Build all packages             |
+| `pnpm lint`   | Lint all packages              |
+| `pnpm format` | Format all packages            |
+| `pnpm test`   | Run tests                      |
 
 ## 📄 License
 

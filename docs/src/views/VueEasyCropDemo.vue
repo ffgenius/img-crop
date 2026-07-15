@@ -4,7 +4,10 @@ import type { Area, Point } from '@antdv-next/vue-easy-crop'
 import Cropper from '@antdv-next/vue-easy-crop'
 import { ref, computed } from 'vue'
 
+import { useI18n } from '../i18n'
 import IframeWrapper from '../IframeWrapper.vue'
+
+const { t } = useI18n()
 
 const TEST_IMAGES: Record<string, string> = {
   '/images/dog.jpeg': 'Landscape',
@@ -38,10 +41,10 @@ const initialCroppedAreaPixels = setInitialCrop
   : undefined
 
 const aspectLabel = computed(() => {
-  if (aspect.value === 4 / 3) return '4:3（横向）'
-  if (aspect.value === 1) return '1:1（正方形）'
-  if (aspect.value === 3 / 4) return '3:4（纵向）'
-  if (aspect.value === 16 / 9) return '16:9（宽屏）'
+  if (aspect.value === 4 / 3) return t('demo.cropper.aspect4:3')
+  if (aspect.value === 1) return t('demo.cropper.aspect1:1')
+  if (aspect.value === 3 / 4) return t('demo.cropper.aspect3:4')
+  if (aspect.value === 16 / 9) return t('demo.cropper.aspect16:9')
   return `${aspect.value.toFixed(2)}`
 })
 
@@ -112,11 +115,11 @@ function onImageChange(e: Event) {
   <div class="demo-app">
     <!-- Controls (hideable via ?hideControls=true) -->
     <aside v-if="!hideControls" class="control-panel">
-      <h2>参数控制</h2>
+      <h2>{{ t('demo.cropper.title') }}</h2>
 
       <!-- Zoom -->
       <div class="control-group">
-        <label>缩放：{{ zoom.toFixed(1) }}x</label>
+        <label>{{ t('demo.cropper.zoom') }}：{{ zoom.toFixed(1) }}x</label>
         <input
           data-testid="zoom-slider"
           type="range"
@@ -130,7 +133,7 @@ function onImageChange(e: Event) {
 
       <!-- Rotation -->
       <div class="control-group">
-        <label>旋转：{{ rotation }}°</label>
+        <label>{{ t('demo.cropper.rotation') }}：{{ rotation }}°</label>
         <input
           data-testid="rotation-slider"
           type="range"
@@ -144,7 +147,7 @@ function onImageChange(e: Event) {
 
       <!-- Aspect ratio -->
       <div class="control-group">
-        <label>宽高比：{{ aspectLabel }}</label>
+        <label>{{ t('demo.cropper.aspect') }}：{{ aspectLabel }}</label>
         <div class="aspect-buttons">
           <button
             data-testid="aspect-4-3"
@@ -179,28 +182,28 @@ function onImageChange(e: Event) {
 
       <!-- Crop shape -->
       <div class="control-group">
-        <label>裁剪形状</label>
+        <label>{{ t('demo.cropper.cropShape') }}</label>
         <div class="aspect-buttons">
           <button
             data-testid="shape-rect"
             :class="{ active: cropShape === 'rect' }"
             @click="cropShape = 'rect'"
           >
-            矩形
+            {{ t('demo.cropper.shape.rect') }}
           </button>
           <button
             data-testid="shape-round"
             :class="{ active: cropShape === 'round' }"
             @click="cropShape = 'round'"
           >
-            圆形
+            {{ t('demo.cropper.shape.round') }}
           </button>
         </div>
       </div>
 
       <!-- Picture select -->
       <div class="control-group">
-        <label>图片</label>
+        <label>{{ t('demo.cropper.image') }}</label>
         <select
           id="picture-select"
           data-testid="picture-select"
@@ -221,24 +224,26 @@ function onImageChange(e: Event) {
           class="btn-center"
           @click="centerHorizontally"
         >
-          Center Horizontally
+          {{ t('demo.cropper.center') }}
         </button>
       </div>
 
       <!-- Reset -->
       <div class="control-group">
         <button data-testid="btn-reset" class="btn-reset" @click="resetAll">
-          重置所有参数
+          {{ t('demo.cropper.reset') }}
         </button>
       </div>
 
       <!-- Crop data (with IDs for test assertions) -->
       <div class="control-group crop-data">
-        <h3>裁剪数据</h3>
+        <h3>{{ t('demo.cropper.cropData') }}</h3>
         <table>
           <tbody>
             <tr>
-              <td colspan="2"><strong>百分比区域</strong></td>
+              <td colspan="2">
+                <strong>{{ t('demo.cropper.percentageArea') }}</strong>
+              </td>
             </tr>
             <tr>
               <td>X</td>
@@ -253,7 +258,7 @@ function onImageChange(e: Event) {
               </td>
             </tr>
             <tr>
-              <td>宽度</td>
+              <td>{{ t('demo.cropper.width') }}</td>
               <td :id="'crop-area-width'">
                 {{
                   croppedArea?.width != null
@@ -263,7 +268,7 @@ function onImageChange(e: Event) {
               </td>
             </tr>
             <tr>
-              <td>高度</td>
+              <td>{{ t('demo.cropper.height') }}</td>
               <td :id="'crop-area-height'">
                 {{
                   croppedArea?.height != null
@@ -276,7 +281,9 @@ function onImageChange(e: Event) {
               <td colspan="2"></td>
             </tr>
             <tr>
-              <td colspan="2"><strong>像素区域</strong></td>
+              <td colspan="2">
+                <strong>{{ t('demo.cropper.pixelArea') }}</strong>
+              </td>
             </tr>
             <tr>
               <td>X</td>
@@ -287,11 +294,11 @@ function onImageChange(e: Event) {
               <td>{{ croppedAreaPixels?.y ?? '-' }}px</td>
             </tr>
             <tr>
-              <td>宽度</td>
+              <td>{{ t('demo.cropper.width') }}</td>
               <td>{{ croppedAreaPixels?.width ?? '-' }}px</td>
             </tr>
             <tr>
-              <td>高度</td>
+              <td>{{ t('demo.cropper.height') }}</td>
               <td>{{ croppedAreaPixels?.height ?? '-' }}px</td>
             </tr>
           </tbody>
@@ -299,12 +306,12 @@ function onImageChange(e: Event) {
       </div>
 
       <div class="control-group tips">
-        <h3>操作提示</h3>
+        <h3>{{ t('demo.cropper.tips') }}</h3>
         <ul>
-          <li>🖱️ 拖拽图片移动裁剪区域</li>
-          <li>🔄 滚轮缩放图片</li>
-          <li>📱 双指捏合缩放 / 旋转</li>
-          <li>⌨️ 方向键微调位置</li>
+          <li>{{ t('demo.cropper.tip.drag') }}</li>
+          <li>{{ t('demo.cropper.tip.zoom') }}</li>
+          <li>{{ t('demo.cropper.tip.pinch') }}</li>
+          <li>{{ t('demo.cropper.tip.keyboard') }}</li>
         </ul>
       </div>
     </aside>
