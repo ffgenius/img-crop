@@ -1,9 +1,4 @@
 <script setup lang="ts">
-import { useRouter, useRoute } from 'vue-router'
-
-const router = useRouter()
-const route = useRoute()
-
 const navItems = [
   { path: '/', label: 'vue-easy-crop', title: '底层裁剪组件演示' },
   {
@@ -89,6 +84,5 @@ const navItems = [
 .app-main {
   flex: 1;
   min-height: 0;
-  display: flex;
 }
 </style>
