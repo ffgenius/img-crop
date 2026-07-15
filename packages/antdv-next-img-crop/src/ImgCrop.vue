@@ -71,6 +71,8 @@ export default defineComponent({
     // Modal state
     const modalOpen = ref(false)
     const modalImage = ref('')
+    const cropperVisible = ref(false)
+    let pendingModalImage = ''
 
     // Pending promise state
     let pendingResolve: ((value: unknown) => void) | null = null
@@ -156,8 +158,6 @@ export default defineComponent({
 
     function onModalCancel() {
       modalOpen.value = false
-      modalImage.value = ''
-      easyCropInstance?.onReset()
 
       let resolved = false
       callbacks.onModalCancel?.(((v: unknown) => {
@@ -172,14 +172,14 @@ export default defineComponent({
     }
 
     async function onModalOk() {
-      modalOpen.value = false
-      modalImage.value = ''
-      easyCropInstance?.onReset()
-
       const file = pendingFile
-      if (!file) return
+      if (!file) {
+        modalOpen.value = false
+        return
+      }
 
       const canvas = getCropCanvas()
+      modalOpen.value = false
       const { type, name, uid } = file
       const blob = await new Promise<Blob | null>((r) =>
         canvas.toBlob(r, type, props.quality)
@@ -206,6 +206,25 @@ export default defineComponent({
       pendingResolve = null
       pendingReject = null
       pendingFile = null
+    }
+
+    function onModalAfterOpenChange(open: boolean) {
+      if (open) {
+        modalImage.value = pendingModalImage
+      } else {
+        easyCropInstance?.onReset()
+        modalRotation.value = ROTATION_INITIAL
+        modalImage.value = ''
+        pendingModalImage = ''
+        cropperVisible.value = false
+      }
+
+      const afterOpenChange = (
+        props.modalProps as
+          | { afterOpenChange?: (open: boolean) => void }
+          | undefined
+      )?.afterOpenChange
+      afterOpenChange?.(open)
     }
 
     // --- Wrapped beforeUpload ---
@@ -255,11 +274,9 @@ export default defineComponent({
             const reader = new FileReader()
             reader.addEventListener('load', () => {
               if (typeof reader.result === 'string') {
+                pendingModalImage = reader.result
+                cropperVisible.value = true
                 modalOpen.value = true
-                // Defer setting modalImage to next tick to ensure modal has opened
-                setTimeout(() => {
-                  modalImage.value = reader.result as string
-                }, 10)
               }
             })
             reader.readAsDataURL(proc as unknown as Blob)
@@ -323,26 +340,28 @@ export default defineComponent({
         beforeUpload: getWrappedBeforeUpload(userBeforeUpload),
       })
 
-      const cropper = h(ImgCropModal, {
-        ref: easyCropRefHandler,
-        modalImage: modalImage.value,
-        zoomSlider: props.zoomSlider,
-        rotationSlider: props.rotationSlider,
-        aspectSlider: props.aspectSlider,
-        showReset: props.showReset,
-        resetBtnText: resetBtnLabel.value,
-        aspect: props.aspect,
-        minZoom: props.minZoom,
-        maxZoom: props.maxZoom,
-        minAspect: props.minAspect,
-        maxAspect: props.maxAspect,
-        cropShape: props.cropShape,
-        showGrid: props.showGrid,
-        cropperProps: props.cropperProps,
-        'onUpdate:rotation': (v: number) => {
-          modalRotation.value = v
-        },
-      })
+      const cropper = cropperVisible.value
+        ? h(ImgCropModal, {
+            ref: easyCropRefHandler,
+            modalImage: modalImage.value,
+            zoomSlider: props.zoomSlider,
+            rotationSlider: props.rotationSlider,
+            aspectSlider: props.aspectSlider,
+            showReset: props.showReset,
+            resetBtnText: resetBtnLabel.value,
+            aspect: props.aspect,
+            minZoom: props.minZoom,
+            maxZoom: props.maxZoom,
+            minAspect: props.minAspect,
+            maxAspect: props.maxAspect,
+            cropShape: props.cropShape,
+            showGrid: props.showGrid,
+            cropperProps: props.cropperProps,
+            'onUpdate:rotation': (v: number) => {
+              modalRotation.value = v
+            },
+          })
+        : null
 
       const modal = h(
         Modal,
@@ -352,10 +371,11 @@ export default defineComponent({
           open: modalOpen.value,
           title: modalTitleLabel.value,
           wrapClassName: wrapClassName.value,
-          destroyOnHidden: true,
+          destroyOnHidden: false,
           mask: { closable: false },
           onOk: onModalOk,
           onCancel: onModalCancel,
+          afterOpenChange: onModalAfterOpenChange,
           'onUpdate:open': (v: boolean) => {
             modalOpen.value = v
           },

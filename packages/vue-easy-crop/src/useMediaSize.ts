@@ -11,7 +11,6 @@ export interface UseMediaSizeOptions {
   imageRef: Ref<HTMLImageElement | null>
   videoRef: Ref<HTMLVideoElement | null>
   aspect: () => number
-  rotation: () => number
   objectFit: () =>
     | 'contain'
     | 'cover'
@@ -29,7 +28,6 @@ export function useMediaSize(opts: UseMediaSizeOptions) {
     imageRef,
     videoRef,
     aspect,
-    rotation,
     objectFit,
     cropSizeProp,
     onCropSizeChange,
@@ -151,8 +149,7 @@ export function useMediaSize(opts: UseMediaSizeOptions) {
           newMediaSize.height,
           rect.width,
           rect.height,
-          aspect(),
-          rotation()
+          aspect()
         )
 
     if (

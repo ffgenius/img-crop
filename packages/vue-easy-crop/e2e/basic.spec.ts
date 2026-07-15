@@ -1,9 +1,13 @@
 import { test, expect } from '@playwright/test'
+import { fileURLToPath } from 'node:url'
 
 import { dragAndDrop, setViewportStable } from './helpers'
 
 const IMG_2000x1200 = '/images/2000x1200.jpeg'
 const IMG_CAT = '/images/cat.jpeg'
+const IMG_CROP_FILE = fileURLToPath(
+  new URL('../../../playground/public/images/2000x1200.jpeg', import.meta.url)
+)
 
 test.describe('Basic assertions', () => {
   test.beforeEach(async ({ page }) => {
@@ -41,6 +45,60 @@ test.describe('Basic assertions', () => {
     expect(box).not.toBeNull()
     expect(box!.width).toBeGreaterThan(0)
     expect(box!.height).toBeGreaterThan(0)
+  })
+
+  test('keeps crop area and zoom stable while rotating', async ({ page }) => {
+    const cropper = page.locator('[data-testid="cropper"]')
+    const rotationSlider = page.locator('[data-testid="rotation-slider"]')
+    const zoomSlider = page.locator('[data-testid="zoom-slider"]')
+    const initialBox = await cropper.boundingBox()
+    const initialZoom = await zoomSlider.inputValue()
+
+    expect(initialBox).not.toBeNull()
+
+    for (const rotation of ['15', '89', '90']) {
+      await rotationSlider.evaluate((element, value) => {
+        const input = element as HTMLInputElement
+        input.value = value
+        input.dispatchEvent(new Event('input', { bubbles: true }))
+      }, rotation)
+
+      const rotatedBox = await cropper.boundingBox()
+      expect(rotatedBox).not.toBeNull()
+      expect(rotatedBox!.width).toBeCloseTo(initialBox!.width, 5)
+      expect(rotatedBox!.height).toBeCloseTo(initialBox!.height, 5)
+      await expect(zoomSlider).toHaveValue(initialZoom)
+    }
+
+    await page.locator('[data-testid="aspect-1-1"]').click()
+    const squareBox = await cropper.boundingBox()
+    expect(squareBox).not.toBeNull()
+    expect(squareBox!.width).toBeCloseTo(squareBox!.height, 5)
+  })
+
+  test('keeps round crop area square when aspect changes', async ({ page }) => {
+    const cropper = page.locator('[data-testid="cropper"]')
+
+    await page.locator('[data-testid="shape-round"]').click()
+    await expect
+      .poll(async () => {
+        const box = await cropper.boundingBox()
+        return box ? box.width / box.height : 0
+      })
+      .toBeCloseTo(1, 5)
+    const roundBox = await cropper.boundingBox()
+    expect(roundBox).not.toBeNull()
+
+    await page.locator('[data-testid="aspect-16-9"]').click()
+    await expect
+      .poll(async () => {
+        const box = await cropper.boundingBox()
+        return box ? box.width / box.height : 0
+      })
+      .toBeCloseTo(1, 5)
+    const changedAspectBox = await cropper.boundingBox()
+    expect(changedAspectBox).not.toBeNull()
+    expect(changedAspectBox!.width).toBeCloseTo(roundBox!.width, 5)
   })
 
   test('Display the image and cropper with correct dimension after window resize', async ({
@@ -179,5 +237,80 @@ test.describe('Basic assertions', () => {
 
     // Only one additional cropComplete should fire (debounced)
     expect(cropCompleteLogs.length).toBeLessThanOrEqual(countBefore + 1)
+  })
+})
+
+test.describe('ImgCrop modal regressions', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.setViewportSize({ width: 1200, height: 900 })
+    await page.goto('/#/img-crop')
+    await page.locator('input[type="file"]').setInputFiles(IMG_CROP_FILE)
+    await expect(page.locator('.img-crop-media')).toBeVisible()
+  })
+
+  test('shows the correct crop area on first open', async ({ page }) => {
+    const containerBox = await page.locator('.img-crop-container').boundingBox()
+    const cropBox = await page.locator('[data-testid="cropper"]').boundingBox()
+
+    expect(containerBox).not.toBeNull()
+    expect(cropBox).not.toBeNull()
+    expect(cropBox!.width / cropBox!.height).toBeCloseTo(4 / 3, 2)
+    expect(cropBox!.width).toBeGreaterThan(containerBox!.width * 0.7)
+  })
+
+  test('keeps cropper styles until the close animation finishes', async ({
+    page,
+  }) => {
+    const samples = await page.evaluate(async () => {
+      const closeButton =
+        document.querySelector<HTMLButtonElement>('.ant-modal-close')
+      closeButton?.click()
+
+      const result: { overflow: string; maxWidth: string }[] = []
+      const start = performance.now()
+
+      await new Promise<void>((resolve) => {
+        const sample = () => {
+          const container = document.querySelector('.img-crop-container')
+          const image = document.querySelector('.img-crop-media')
+          if (container && image) {
+            result.push({
+              overflow: getComputedStyle(container).overflow,
+              maxWidth: getComputedStyle(image).maxWidth,
+            })
+          }
+
+          if (performance.now() - start < 400) requestAnimationFrame(sample)
+          else resolve()
+        }
+        requestAnimationFrame(sample)
+      })
+
+      return result
+    })
+
+    expect(samples.length).toBeGreaterThan(0)
+    expect(samples.every(({ overflow }) => overflow === 'hidden')).toBe(true)
+    expect(samples.every(({ maxWidth }) => maxWidth === '100%')).toBe(true)
+    await expect(page.locator('.ant-modal')).toBeHidden()
+    await expect(page.locator('.img-crop-media')).toHaveCount(0)
+  })
+
+  test('resets cropper state before reopening and closes through OK', async ({
+    page,
+  }) => {
+    await page.locator('.img-crop-control-zoom button:last-child').click()
+    await page.locator('.img-crop-control-rotation button:last-child').click()
+    await page.getByRole('button', { name: 'Cancel' }).click()
+    await expect(page.locator('.ant-modal')).toBeHidden()
+
+    await page.locator('input[type="file"]').setInputFiles(IMG_CROP_FILE)
+    const image = page.locator('.img-crop-media')
+    await expect(image).toBeVisible()
+    await expect(image).toHaveCSS('transform', 'matrix(1, 0, 0, 1, 0, 0)')
+
+    await page.getByRole('button', { name: 'OK', exact: true }).click()
+    await expect(page.locator('.ant-modal')).toBeHidden()
+    await expect(page.locator('.img-crop-media')).toHaveCount(0)
   })
 })

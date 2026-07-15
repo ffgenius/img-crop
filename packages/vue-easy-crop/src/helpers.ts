@@ -1,20 +1,17 @@
 import type { Area, MediaSize, Point, Size } from './types'
 
 /**
- * Compute the dimension of the crop area based on media size,
- * aspect ratio and optionally rotation
+ * Compute the dimension of the crop area based on media size and aspect ratio
  */
 export function getCropSize(
   mediaWidth: number,
   mediaHeight: number,
   containerWidth: number,
   containerHeight: number,
-  aspect: number,
-  rotation = 0
+  aspect: number
 ): Size {
-  const { width, height } = rotateSize(mediaWidth, mediaHeight, rotation)
-  const fittingWidth = Math.min(width, containerWidth)
-  const fittingHeight = Math.min(height, containerHeight)
+  const fittingWidth = Math.min(mediaWidth, containerWidth)
+  const fittingHeight = Math.min(mediaHeight, containerHeight)
 
   if (fittingWidth > fittingHeight * aspect) {
     return {

@@ -20,20 +20,10 @@ describe('Helpers', () => {
       const cropSize = helpers.getCropSize(600, 800, 1200, 800, 3 / 4)
       expect(cropSize).toEqual({ height: 800, width: 600 })
     })
-    test('when rotated 66 degrees', () => {
-      const cropSize = helpers.getCropSize(1000, 524, 1000, 600, 16 / 9, 66)
-      expect(cropSize.width).toBeCloseTo(885, 0)
-      expect(cropSize.height).toBeCloseTo(498, 0)
-    })
-    test('when rotated 90 degrees', () => {
-      const cropSize = helpers.getCropSize(1800, 600, 1000, 600, 16 / 9, 90)
-      expect(cropSize.width).toBeCloseTo(600, 0)
-      expect(cropSize.height).toBeCloseTo(337.5, 1)
-    })
-    test('when rotated 90 degrees and container is vertical', () => {
-      const cropSize = helpers.getCropSize(600, 314, 600, 800, 1000 / 1910, 90)
-      expect(cropSize.width).toBeCloseTo(314, 0)
-      expect(cropSize.height).toBeCloseTo(600, 0)
+    test('uses the unrotated media dimensions', () => {
+      const cropSize = helpers.getCropSize(1800, 600, 1000, 600, 16 / 9)
+      expect(cropSize.width).toBeCloseTo(1000, 0)
+      expect(cropSize.height).toBeCloseTo(562.5, 1)
     })
   })
 

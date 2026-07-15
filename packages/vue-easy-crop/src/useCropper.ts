@@ -114,8 +114,7 @@ export function useCropper(
     containerRef,
     imageRef,
     videoRef,
-    aspect: () => aspect.value,
-    rotation: () => rotation.value,
+    aspect: () => (cropShape.value === 'round' ? 1 : aspect.value),
     objectFit: () =>
       objectFit.value as
         | 'contain'
@@ -138,7 +137,7 @@ export function useCropper(
     if (props.cropSize) {
       return props.cropSize.width / props.cropSize.height
     }
-    return aspect.value
+    return cropShape.value === 'round' ? 1 : aspect.value
   }
 
   function getCropData() {
@@ -475,8 +474,12 @@ export function useCropper(
   )
   watch(
     () => props.cropShape,
-    (v) => {
-      if (v !== undefined) cropShape.value = v
+    (v, oldValue) => {
+      if (v !== undefined && v !== oldValue) {
+        cropShape.value = v
+        mediaSizeModule.computeSizes()
+        recomputeCropPosition()
+      }
     }
   )
   watch(

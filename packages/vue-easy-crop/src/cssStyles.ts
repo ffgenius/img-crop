@@ -54,7 +54,6 @@ export const cssStyles = `.vueEasyCrop_Container {
 
 .vueEasyCrop_CropAreaRound {
   border-radius: 50%;
-  clip-path: circle(closest-side at center);
 }
 
 .vueEasyCrop_CropAreaGrid::before {
