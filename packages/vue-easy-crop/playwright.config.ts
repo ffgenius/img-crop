@@ -12,7 +12,7 @@ export default defineConfig({
     screenshot: 'only-on-failure',
   },
   webServer: {
-    command: 'pnpm --filter playground dev',
+    command: 'pnpm --filter docs dev',
     url: 'http://localhost:5173',
     reuseExistingServer: true,
     cwd: '../../',

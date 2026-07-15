@@ -6,7 +6,7 @@ import { dragAndDrop, setViewportStable } from './helpers'
 const IMG_2000x1200 = '/images/2000x1200.jpeg'
 const IMG_CAT = '/images/cat.jpeg'
 const IMG_CROP_FILE = fileURLToPath(
-  new URL('../../../playground/public/images/2000x1200.jpeg', import.meta.url)
+  new URL('../../../docs/public/images/2000x1200.jpeg', import.meta.url)
 )
 
 test.describe('Basic assertions', () => {
@@ -243,7 +243,7 @@ test.describe('Basic assertions', () => {
 test.describe('ImgCrop modal regressions', () => {
   test.beforeEach(async ({ page }) => {
     await page.setViewportSize({ width: 1200, height: 900 })
-    await page.goto('/#/img-crop')
+    await page.goto('/#/img-crop/demo')
     await page.locator('input[type="file"]').setInputFiles(IMG_CROP_FILE)
     await expect(page.locator('.img-crop-media')).toBeVisible()
   })

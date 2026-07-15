@@ -1,5 +1,5 @@
 {
-  "name": "playground",
+  "name": "docs",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -12,6 +12,7 @@
     "@antdv-next/img-crop": "workspace:*",
     "@antdv-next/vue-easy-crop": "workspace:*",
     "antdv-next": "catalog:tooling",
+    "highlight.js": "^11.11.1",
     "vue": "catalog:vue",
     "vue-router": "catalog:vue"
   },

@@ -1,10 +1,15 @@
 {
   "name": "img-crop",
   "version": "1.0.0",
-  "description": "Quick start template based on monorepo",
+  "description": "Vue 3 image cropping components — interactive cropper and antdv-next Upload integration",
   "keywords": [
-    "monorepo",
-    "template"
+    "antdv-next",
+    "crop",
+    "cropper",
+    "image-crop",
+    "upload",
+    "vue",
+    "vue3"
   ],
   "license": "MIT",
   "author": "Bin",

@@ -1,48 +1,53 @@
-# Start Template
+# img-crop
 
-> A quick start template based on a frontend Monorepo architecture. 🚀
+> Vue 3 image cropping components with interactive preview. 🖼️
 
-This is a modern and lightweight monorepo starter template built with **pnpm workspaces** and **Turborepo**. It comes pre-configured with a hyper-fast toolchain for TypeScript development.
+A monorepo of Vue 3 image cropping solutions built with **pnpm workspaces** and **Turborepo**.
 
-## 📦 Features
+## 📦 Packages
 
-- **Monorepo (pnpm workspaces)**: Manage multiple packages and applications in a single repository.
-- **Task Orchestration (Turborepo)**: Fast and incremental build system with caching.
-- **Hyper-fast Toolchain**:
-  - `oxlint` for lightning-fast code linting (replacing traditional ESLint).
-  - `oxfmt` for extremely fast code formatting.
-- **TypeScript**: Configured with modern best practices (`esnext`, `bundler` resolution, `isolatedDeclarations` for fast dts generation).
-- **TypeScript Execution**: `tsx` for running standard TypeScript scripts out of the box.
-- **Bundling (`@template/tools` example)**: Dual-format packing (ESM & CJS) using `tsdown`.
+| Package | Description |
+|---------|-------------|
+| [`@antdv-next/vue-easy-crop`](./packages/vue-easy-crop) | Framework-agnostic Vue 3 cropper component for images and videos |
+| [`@antdv-next/img-crop`](./packages/img-crop) | Image cropper integrated with antdv-next Upload component |
 
-## 🚀 Quick Start via `degit`
+## ✨ Features
 
-You can quickly scaffold a new project using this template with `npx degit`.
+- **Cropper Component** — Drag, zoom, rotate, and crop images/videos with mouse, touch, and keyboard
+- **Upload Integration** — Drop-in wrapper for antdv-next Upload with built-in crop modal
+- **Round & Rectangular** — Support for both circular and rectangular crop shapes
+- **Configurable Aspect Ratio** — Lock to fixed ratios or allow free-form cropping
+- **TypeScript** — Fully typed with exported type definitions
+- **Lightweight** — Minimal dependencies, tree-shakeable
+
+## 🚀 Quick Start
 
 ```bash
+# vue-easy-crop (standalone cropper)
+pnpm add @antdv-next/vue-easy-crop
 
-# Create a new project named "my-project" using this template
-
-npx degit@latest https://github.com/ffgenius/template-starter.git my-project
-
-# Navigate to the new project
-
-cd my-project
-
-# Install dependencies (pnpm is recommended and required by the workspace)
-
-pnpm install
+# img-crop (antdv-next Upload integration)
+pnpm add @antdv-next/img-crop antdv-next
 ```
 
-## 🛠️ Available Scripts
+## 📖 Documentation
 
-From the root of the repository, you can run the following commands:
+Run the docs site locally:
 
-- `pnpm run dev`: Starts the development environments across all packages in parallel.
-- `pnpm run build`: Builds all packages utilizing Turborepo's caching.
-- `pnpm run lint`: Runs `oxlint` to check for code issues instantly.
-- `pnpm run lint:fix`: Auto-fixes standard code issues using `oxlint`.
-- `pnpm run format`: Formats code using `oxfmt`.
+```bash
+pnpm install
+pnpm --filter docs dev
+```
+
+## 🛠️ Scripts
+
+| Command | Description |
+|---------|-------------|
+| `pnpm dev` | Start all packages in dev mode |
+| `pnpm build` | Build all packages |
+| `pnpm lint` | Lint all packages |
+| `pnpm format` | Format all packages |
+| `pnpm test` | Run tests |
 
 ## 📄 License
 

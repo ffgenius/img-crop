@@ -1,7 +1,7 @@
 {
   "name": "@antdv-next/img-crop",
   "version": "1.0.0",
-  "description": "An image cropper for Ant Design Vue Next Upload",
+  "description": "Image cropper integrated with antdv-next Upload. Wrap an Upload component, crop in a modal, get the cropped file in beforeUpload.",
   "keywords": [
     "ant-design-vue",
     "antdv-next",

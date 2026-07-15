@@ -19,6 +19,6 @@
     "verbatimModuleSyntax": true,
     "skipLibCheck": true
   },
-  "include": ["packages/*/src", "packages/*/tests"],
+  "include": ["packages/*/src", "packages/*/tests", "packages/*/e2e"],
   "exclude": ["packages/*/tests/fixtures"]
 }
