@@ -82,7 +82,7 @@ jobs:
         run: pnpm install
 
       - name: Install Chromium
-        run: pnpm exec playwright install chromium
+        run: pnpm --filter vue-easy-crop exec playwright install chromium
 
       - name: Build
         run: pnpm run build
