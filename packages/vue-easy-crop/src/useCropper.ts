@@ -1,12 +1,15 @@
-import {
-  type Ref,
-  ref,
-  shallowRef,
-  watch,
-  onMounted,
-  onUnmounted,
-} from 'vue'
-import type { Area, CropperInteraction, MediaSize, Point, Size, VideoSrc } from './types'
+import { type Ref, ref, shallowRef, watch, onMounted, onUnmounted } from 'vue'
+
+import type {
+  Area,
+  CropperInteraction,
+  MediaSize,
+  Point,
+  Size,
+  VideoSrc,
+} from './types'
+
+import { cssStyles } from './cssStyles'
 import {
   computeCroppedArea,
   getInitialCropFromCroppedAreaPercentages,
@@ -14,9 +17,8 @@ import {
   restrictPosition,
   classNames,
 } from './helpers'
-import { useMediaSize } from './useMediaSize'
 import { useInteraction } from './useInteraction'
-import { cssStyles } from './cssStyles'
+import { useMediaSize } from './useMediaSize'
 
 // --- constants ---
 const MIN_ZOOM = 1
@@ -77,7 +79,7 @@ export function useCropper(
   emit: CropperEmits,
   containerRef: Ref<HTMLElement | null>,
   imageRef: Ref<HTMLImageElement | null>,
-  videoRef: Ref<HTMLVideoElement | null>,
+  videoRef: Ref<HTMLVideoElement | null>
 ) {
   // --- normalize props with defaults ---
   const zoom = ref(props.zoom ?? 1)
@@ -93,7 +95,9 @@ export function useCropper(
   const restrictPositionProp = ref(props.restrictPosition ?? true)
   const roundCropAreaPixels = ref(props.roundCropAreaPixels ?? false)
   const keyboardStep = ref(props.keyboardStep ?? KEYBOARD_STEP)
-  const disableAutomaticStylesInjection = ref(props.disableAutomaticStylesInjection ?? false)
+  const disableAutomaticStylesInjection = ref(
+    props.disableAutomaticStylesInjection ?? false
+  )
 
   // internal state
   const isInitialized = ref(false)
@@ -112,7 +116,13 @@ export function useCropper(
     videoRef,
     aspect: () => aspect.value,
     rotation: () => rotation.value,
-    objectFit: () => objectFit.value as 'contain' | 'cover' | 'horizontal-cover' | 'vertical-cover' | undefined,
+    objectFit: () =>
+      objectFit.value as
+        | 'contain'
+        | 'cover'
+        | 'horizontal-cover'
+        | 'vertical-cover'
+        | undefined,
     cropSizeProp: () => props.cropSize,
     onCropSizeChange: (newCropSize) => {
       emit('crop-size-change', newCropSize)
@@ -136,7 +146,13 @@ export function useCropper(
     if (!cs) return null
 
     const restrictedPosition = restrictPositionProp.value
-      ? restrictPosition(props.crop, mediaSizeRef.value, cs, zoom.value, rotation.value)
+      ? restrictPosition(
+          props.crop,
+          mediaSizeRef.value,
+          cs,
+          zoom.value,
+          rotation.value
+        )
       : props.crop
 
     return computeCroppedArea(
@@ -146,7 +162,7 @@ export function useCropper(
       getAspect(),
       zoom.value,
       rotation.value,
-      restrictPositionProp.value,
+      restrictPositionProp.value
     )
   }
 
@@ -178,7 +194,7 @@ export function useCropper(
         rotation.value,
         cropSz,
         minZoom.value,
-        maxZoom.value,
+        maxZoom.value
       )
       emit('update:crop', crop)
       emit('update:zoom', initZoom)
@@ -189,7 +205,7 @@ export function useCropper(
         rotation.value,
         cropSz,
         minZoom.value,
-        maxZoom.value,
+        maxZoom.value
       )
       emit('update:crop', crop)
       emit('update:zoom', initZoom)
@@ -197,13 +213,19 @@ export function useCropper(
   }
 
   // --- recompute position on prop changes ---
-  function recomputeCropPosition({ isResizeTriggered = false }: { isResizeTriggered?: boolean } = {}) {
+  function recomputeCropPosition({
+    isResizeTriggered = false,
+  }: { isResizeTriggered?: boolean } = {}) {
     const cs = cropSizeRef.value
     if (!cs) return
 
     let adjustedCrop = { ...props.crop }
 
-    if (isInitialized.value && previousCropSize?.width && previousCropSize?.height) {
+    if (
+      isInitialized.value &&
+      previousCropSize?.width &&
+      previousCropSize?.height
+    ) {
       const sizeChanged =
         Math.abs(previousCropSize.width - cs.width) > 1e-6 ||
         Math.abs(previousCropSize.height - cs.height) > 1e-6
@@ -219,7 +241,13 @@ export function useCropper(
     }
 
     const newPosition = restrictPositionProp.value
-      ? restrictPosition(adjustedCrop, mediaSizeRef.value, cs, zoom.value, rotation.value)
+      ? restrictPosition(
+          adjustedCrop,
+          mediaSizeRef.value,
+          cs,
+          zoom.value,
+          rotation.value
+        )
       : adjustedCrop
 
     previousCropSize = cs
@@ -339,97 +367,171 @@ export function useCropper(
   })
 
   // --- watchers (componentDidUpdate equivalent) ---
-  watch(() => props.rotation, (newVal, oldVal) => {
-    if (newVal !== undefined && newVal !== oldVal) {
-      rotation.value = newVal
-      mediaSizeModule.computeSizes()
-      recomputeCropPosition()
+  watch(
+    () => props.rotation,
+    (newVal, oldVal) => {
+      if (newVal !== undefined && newVal !== oldVal) {
+        rotation.value = newVal
+        mediaSizeModule.computeSizes()
+        recomputeCropPosition()
+      }
     }
-  })
+  )
 
-  watch(() => props.aspect, (newVal, oldVal) => {
-    if (newVal !== oldVal) {
-      aspect.value = newVal ?? (4 / 3)
-      mediaSizeModule.computeSizes()
+  watch(
+    () => props.aspect,
+    (newVal, oldVal) => {
+      if (newVal !== oldVal) {
+        aspect.value = newVal ?? 4 / 3
+        mediaSizeModule.computeSizes()
+      }
     }
-  })
+  )
 
-  watch(() => props.objectFit, (newVal) => {
-    if (newVal !== undefined) {
-      objectFit.value = newVal
-      mediaSizeModule.computeSizes()
+  watch(
+    () => props.objectFit,
+    (newVal) => {
+      if (newVal !== undefined) {
+        objectFit.value = newVal
+        mediaSizeModule.computeSizes()
+      }
     }
-  })
+  )
 
-  watch(() => props.zoom, (newVal) => {
-    if (newVal !== undefined && newVal !== zoom.value) {
-      zoom.value = newVal
-      recomputeCropPosition()
+  watch(
+    () => props.zoom,
+    (newVal) => {
+      if (newVal !== undefined && newVal !== zoom.value) {
+        zoom.value = newVal
+        recomputeCropPosition()
+      }
     }
-  })
+  )
 
-  watch(() => props.cropSize, (newVal, oldVal) => {
-    if (newVal?.height !== oldVal?.height || newVal?.width !== oldVal?.width) {
-      mediaSizeModule.computeSizes()
+  watch(
+    () => props.cropSize,
+    (newVal, oldVal) => {
+      if (
+        newVal?.height !== oldVal?.height ||
+        newVal?.width !== oldVal?.width
+      ) {
+        mediaSizeModule.computeSizes()
+      }
     }
-  })
+  )
 
-  watch(() => props.crop, () => {
-    emitCropAreaChange()
-  })
+  watch(
+    () => props.crop,
+    () => {
+      emitCropAreaChange()
+    }
+  )
 
-  watch(() => props.zoomWithScroll, (newVal) => {
-    if (newVal !== undefined) {
-      zoomWithScroll.value = newVal
-      if (containerRef.value) {
-        if (newVal) {
-          cleanupWheel = interaction.setupWheelListener(containerRef.value)
-        } else {
-          cleanupWheel?.()
-          cleanupWheel = null
+  watch(
+    () => props.zoomWithScroll,
+    (newVal) => {
+      if (newVal !== undefined) {
+        zoomWithScroll.value = newVal
+        if (containerRef.value) {
+          if (newVal) {
+            cleanupWheel = interaction.setupWheelListener(containerRef.value)
+          } else {
+            cleanupWheel?.()
+            cleanupWheel = null
+          }
         }
       }
     }
-  })
+  )
 
   // When video source changes, reload the video element (mirrors componentDidUpdate in react-easy-crop)
-  watch(() => props.video, (newVal, oldVal) => {
-    if (newVal !== oldVal && videoRef.value) {
-      videoRef.value.load()
+  watch(
+    () => props.video,
+    (newVal, oldVal) => {
+      if (newVal !== oldVal && videoRef.value) {
+        videoRef.value.load()
+      }
     }
-  })
+  )
 
   // Sync props → internal refs
-  watch(() => props.rotation, (v) => { if (v !== undefined) rotation.value = v })
-  watch(() => props.minZoom, (v) => { if (v !== undefined) minZoom.value = v })
-  watch(() => props.maxZoom, (v) => { if (v !== undefined) maxZoom.value = v })
-  watch(() => props.cropShape, (v) => { if (v !== undefined) cropShape.value = v })
-  watch(() => props.showGrid, (v) => { if (v !== undefined) showGrid.value = v })
-  watch(() => props.zoomSpeed, (v) => { if (v !== undefined) zoomSpeed.value = v })
-  watch(() => props.restrictPosition, (v) => { if (v !== undefined) restrictPositionProp.value = v })
-  watch(() => props.roundCropAreaPixels, (v) => { if (v !== undefined) roundCropAreaPixels.value = v })
-  watch(() => props.keyboardStep, (v) => { if (v !== undefined) keyboardStep.value = v })
+  watch(
+    () => props.rotation,
+    (v) => {
+      if (v !== undefined) rotation.value = v
+    }
+  )
+  watch(
+    () => props.minZoom,
+    (v) => {
+      if (v !== undefined) minZoom.value = v
+    }
+  )
+  watch(
+    () => props.maxZoom,
+    (v) => {
+      if (v !== undefined) maxZoom.value = v
+    }
+  )
+  watch(
+    () => props.cropShape,
+    (v) => {
+      if (v !== undefined) cropShape.value = v
+    }
+  )
+  watch(
+    () => props.showGrid,
+    (v) => {
+      if (v !== undefined) showGrid.value = v
+    }
+  )
+  watch(
+    () => props.zoomSpeed,
+    (v) => {
+      if (v !== undefined) zoomSpeed.value = v
+    }
+  )
+  watch(
+    () => props.restrictPosition,
+    (v) => {
+      if (v !== undefined) restrictPositionProp.value = v
+    }
+  )
+  watch(
+    () => props.roundCropAreaPixels,
+    (v) => {
+      if (v !== undefined) roundCropAreaPixels.value = v
+    }
+  )
+  watch(
+    () => props.keyboardStep,
+    (v) => {
+      if (v !== undefined) keyboardStep.value = v
+    }
+  )
 
   // — computed helpers for the template —
   function getImageClasses() {
-    const fit = mediaSizeModule.mediaObjectFit.value ?? mediaSizeModule.resolveObjectFit()
+    const fit =
+      mediaSizeModule.mediaObjectFit.value ?? mediaSizeModule.resolveObjectFit()
     return classNames(
       'vueEasyCrop_Image',
       fit === 'contain' && 'vueEasyCrop_Contain',
       fit === 'horizontal-cover' && 'vueEasyCrop_Cover_Horizontal',
       fit === 'vertical-cover' && 'vueEasyCrop_Cover_Vertical',
-      props.mediaClass,
+      props.mediaClass
     )
   }
 
   function getVideoClasses() {
-    const fit = mediaSizeModule.mediaObjectFit.value ?? mediaSizeModule.resolveObjectFit()
+    const fit =
+      mediaSizeModule.mediaObjectFit.value ?? mediaSizeModule.resolveObjectFit()
     return classNames(
       'vueEasyCrop_Video',
       fit === 'contain' && 'vueEasyCrop_Contain',
       fit === 'horizontal-cover' && 'vueEasyCrop_Cover_Horizontal',
       fit === 'vertical-cover' && 'vueEasyCrop_Cover_Vertical',
-      props.mediaClass,
+      props.mediaClass
     )
   }
 
@@ -438,13 +540,15 @@ export function useCropper(
       'vueEasyCrop_CropArea',
       cropShape.value === 'round' && 'vueEasyCrop_CropAreaRound',
       showGrid.value && 'vueEasyCrop_CropAreaGrid',
-      props.cropAreaClass,
+      props.cropAreaClass
     )
   }
 
   function getMediaTransform() {
-    return props.transform
-      || `translate(${props.crop.x}px, ${props.crop.y}px) rotate(${rotation.value}deg) scale(${zoom.value})`
+    return (
+      props.transform ||
+      `translate(${props.crop.x}px, ${props.crop.y}px) rotate(${rotation.value}deg) scale(${zoom.value})`
+    )
   }
 
   function getVideoSources(): VideoSrc[] {

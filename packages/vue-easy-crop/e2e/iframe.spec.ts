@@ -6,7 +6,9 @@ test.describe('Iframed assertions', () => {
     await page.goto('/?iframed=true')
   })
 
-  test('Display the crop area with correct styles applied to the iframe', async ({ page }) => {
+  test('Display the crop area with correct styles applied to the iframe', async ({
+    page,
+  }) => {
     // Access the iframe's content document
     const iframe = page.locator('iframe[data-testid="cropper-iframe"]')
     await expect(iframe).toBeVisible()

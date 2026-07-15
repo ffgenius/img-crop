@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "A Vue 3 component to crop images/videos with easy interactions",
   "keywords": [
-    "vue",
     "crop",
     "cropper",
     "image crop",
+    "vue",
     "vue3"
   ],
   "license": "MIT",
@@ -23,13 +23,10 @@
     "build": "vp pack",
     "dev": "vp pack -w",
     "test": "vitest run",
-    "test:watch": "vitest",
+    "test:all": "vitest run && playwright test",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "test:all": "vitest run && playwright test"
-  },
-  "peerDependencies": {
-    "vue": ">=3.0.0"
+    "test:watch": "vitest"
   },
   "dependencies": {
     "normalize-wheel": "catalog:tooling"
@@ -42,5 +39,8 @@
     "vitest": "catalog:testing",
     "vue": "catalog:vue",
     "vue-tsc": "catalog:vue"
+  },
+  "peerDependencies": {
+    "vue": ">=3.0.0"
   }
 }

@@ -10,7 +10,10 @@ onMounted(() => {
 
   const checkReady = () => {
     const doc = iframe.contentDocument
-    if (!doc || (doc.readyState !== 'interactive' && doc.readyState !== 'complete')) {
+    if (
+      !doc ||
+      (doc.readyState !== 'interactive' && doc.readyState !== 'complete')
+    ) {
       return
     }
     iframeBody.value = doc.body

@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test'
+
 import { dragAndDrop } from './helpers'
 
 test.describe('Mouse assertions', () => {
@@ -73,7 +74,9 @@ test.describe('Mouse assertions', () => {
     await page.mouse.wheel(cx, cy, 0, 50)
   })
 
-  test('Mouse wheel should zoom in and out following the pointer', async ({ page }) => {
+  test('Mouse wheel should zoom in and out following the pointer', async ({
+    page,
+  }) => {
     const container = page.locator('[data-testid="container"]')
     const box = await container.boundingBox()
     if (!box) throw new Error('Container not visible')

@@ -50,7 +50,11 @@ export function restrictPosition(
   zoom: number,
   rotation = 0
 ): Point {
-  const { width, height } = rotateSize(mediaSize.width, mediaSize.height, rotation)
+  const { width, height } = rotateSize(
+    mediaSize.width,
+    mediaSize.height,
+    rotation
+  )
 
   return {
     x: restrictPositionCoord(position.x, width, cropSize.width, zoom),
@@ -95,14 +99,19 @@ export function computeCroppedArea(
   const limitAreaFn = restrictPosition ? limitArea : noOp
 
   const mediaBBoxSize = rotateSize(mediaSize.width, mediaSize.height, rotation)
-  const mediaNaturalBBoxSize = rotateSize(mediaSize.naturalWidth, mediaSize.naturalHeight, rotation)
+  const mediaNaturalBBoxSize = rotateSize(
+    mediaSize.naturalWidth,
+    mediaSize.naturalHeight,
+    rotation
+  )
 
   // calculate the crop area in percentages
   // in the rotated space
   const croppedAreaPercentages = {
     x: limitAreaFn(
       100,
-      (((mediaBBoxSize.width - cropSize.width / zoom) / 2 - crop.x / zoom) / mediaBBoxSize.width) *
+      (((mediaBBoxSize.width - cropSize.width / zoom) / 2 - crop.x / zoom) /
+        mediaBBoxSize.width) *
         100
     ),
     y: limitAreaFn(
@@ -111,8 +120,14 @@ export function computeCroppedArea(
         mediaBBoxSize.height) *
         100
     ),
-    width: limitAreaFn(100, ((cropSize.width / mediaBBoxSize.width) * 100) / zoom),
-    height: limitAreaFn(100, ((cropSize.height / mediaBBoxSize.height) * 100) / zoom),
+    width: limitAreaFn(
+      100,
+      ((cropSize.width / mediaBBoxSize.width) * 100) / zoom
+    ),
+    height: limitAreaFn(
+      100,
+      ((cropSize.height / mediaBBoxSize.height) * 100) / zoom
+    ),
   }
 
   // we compute the pixels size naively
@@ -128,7 +143,8 @@ export function computeCroppedArea(
       (croppedAreaPercentages.height * mediaNaturalBBoxSize.height) / 100
     )
   )
-  const isImgWiderThanHigh = mediaNaturalBBoxSize.width >= mediaNaturalBBoxSize.height * aspect
+  const isImgWiderThanHigh =
+    mediaNaturalBBoxSize.width >= mediaNaturalBBoxSize.height * aspect
 
   // then we ensure the width and height exactly match the aspect (to avoid rounding approximations)
   // if the media is wider than high, when zoom is 0, the crop height will be equals to image height
@@ -189,7 +205,8 @@ export function getInitialCropFromCroppedAreaPercentages(
 
   // This is the inverse process of computeCroppedArea
   const zoom = clamp(
-    (cropSize.width / mediaBBoxSize.width) * (100 / croppedAreaPercentages.width),
+    (cropSize.width / mediaBBoxSize.width) *
+      (100 / croppedAreaPercentages.width),
     minZoom,
     maxZoom
   )
@@ -234,7 +251,11 @@ export function getInitialCropFromCroppedAreaPixels(
   minZoom: number,
   maxZoom: number
 ): { crop: Point; zoom: number } {
-  const mediaNaturalBBoxSize = rotateSize(mediaSize.naturalWidth, mediaSize.naturalHeight, rotation)
+  const mediaNaturalBBoxSize = rotateSize(
+    mediaSize.naturalWidth,
+    mediaSize.naturalHeight,
+    rotation
+  )
 
   const zoom = clamp(
     getZoomFromCroppedAreaPixels(croppedAreaPixels, mediaSize, cropSize),
@@ -249,9 +270,12 @@ export function getInitialCropFromCroppedAreaPixels(
 
   const crop = {
     x:
-      ((mediaNaturalBBoxSize.width - croppedAreaPixels.width) / 2 - croppedAreaPixels.x) * cropZoom,
+      ((mediaNaturalBBoxSize.width - croppedAreaPixels.width) / 2 -
+        croppedAreaPixels.x) *
+      cropZoom,
     y:
-      ((mediaNaturalBBoxSize.height - croppedAreaPixels.height) / 2 - croppedAreaPixels.y) *
+      ((mediaNaturalBBoxSize.height - croppedAreaPixels.height) / 2 -
+        croppedAreaPixels.y) *
       cropZoom,
   }
   return { crop, zoom }
@@ -274,12 +298,18 @@ export function getRadianAngle(degreeValue: number) {
 /**
  * Returns the new bounding area of a rotated rectangle.
  */
-export function rotateSize(width: number, height: number, rotation: number): Size {
+export function rotateSize(
+  width: number,
+  height: number,
+  rotation: number
+): Size {
   const rotRad = getRadianAngle(rotation)
 
   return {
-    width: Math.abs(Math.cos(rotRad) * width) + Math.abs(Math.sin(rotRad) * height),
-    height: Math.abs(Math.sin(rotRad) * width) + Math.abs(Math.cos(rotRad) * height),
+    width:
+      Math.abs(Math.cos(rotRad) * width) + Math.abs(Math.sin(rotRad) * height),
+    height:
+      Math.abs(Math.sin(rotRad) * width) + Math.abs(Math.cos(rotRad) * height),
   }
 }
 
@@ -293,7 +323,9 @@ export function clamp(value: number, min: number, max: number) {
 /**
  * Combine multiple class names into a single string.
  */
-export function classNames(...args: (boolean | string | number | undefined | void | null)[]) {
+export function classNames(
+  ...args: (boolean | string | number | undefined | void | null)[]
+) {
   return args
     .filter((value) => {
       if (typeof value === 'string' && value.length > 0) {

@@ -1,8 +1,17 @@
 <script setup lang="ts">
 import { useTemplateRef } from 'vue'
-import type { Area, CropperInteraction, MediaSize, Point, Size, VideoSrc } from './types'
-import { useCropper } from './useCropper'
+
+import type {
+  Area,
+  CropperInteraction,
+  MediaSize,
+  Point,
+  Size,
+  VideoSrc,
+} from './types'
 import type { CropperProps, CropperEmits } from './useCropper'
+
+import { useCropper } from './useCropper'
 
 // Re-export types for convenience
 export type { Area, CropperInteraction, MediaSize, Point, Size, VideoSrc }

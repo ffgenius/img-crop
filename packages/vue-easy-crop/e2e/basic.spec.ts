@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test'
+
 import { dragAndDrop, setViewportStable } from './helpers'
 
 const IMG_2000x1200 = '/images/2000x1200.jpeg'
@@ -12,7 +13,9 @@ test.describe('Basic assertions', () => {
     await page.waitForSelector('[data-testid="cropper"]')
   })
 
-  test('Display the image and cropper with correct dimension', async ({ page }) => {
+  test('Display the image and cropper with correct dimension', async ({
+    page,
+  }) => {
     const img = page.locator('img')
     await expect(img).toBeVisible()
 
@@ -41,7 +44,9 @@ test.describe('Basic assertions', () => {
     expect(box!.height).toBeGreaterThan(0)
   })
 
-  test('Display the image and cropper with correct dimension after window resize', async ({ page }) => {
+  test('Display the image and cropper with correct dimension after window resize', async ({
+    page,
+  }) => {
     await setViewportStable(page, 600, 1000)
 
     const img = page.locator('img')
@@ -54,17 +59,25 @@ test.describe('Basic assertions', () => {
     expect(box!.height).toBeLessThanOrEqual(1000)
   })
 
-  test('should be able to set the crop position/zoom on load', async ({ page }) => {
-    await page.goto(`/?img=${encodeURIComponent(IMG_2000x1200)}&setInitialCrop=true`)
+  test('should be able to set the crop position/zoom on load', async ({
+    page,
+  }) => {
+    await page.goto(
+      `/?img=${encodeURIComponent(IMG_2000x1200)}&setInitialCrop=true`
+    )
     await page.waitForSelector('[data-testid="cropper"]')
 
     const img = page.locator('img')
     await expect(img).toBeVisible()
   })
 
-  test('should be able to center through external buttons', async ({ page }) => {
+  test('should be able to center through external buttons', async ({
+    page,
+  }) => {
     // Hide controls for consistent viewport
-    await page.goto(`/?img=${encodeURIComponent(IMG_2000x1200)}&hideControls=true`)
+    await page.goto(
+      `/?img=${encodeURIComponent(IMG_2000x1200)}&hideControls=true`
+    )
     await page.waitForSelector('[data-testid="cropper"]')
 
     // Drag image to the left
@@ -94,7 +107,9 @@ test.describe('Basic assertions', () => {
     expect(xVal).toBeGreaterThanOrEqual(0)
   })
 
-  test('should preserve crop position after window resize', async ({ page }) => {
+  test('should preserve crop position after window resize', async ({
+    page,
+  }) => {
     await page.goto(`/?img=${encodeURIComponent(IMG_2000x1200)}`)
     await page.waitForSelector('[data-testid="cropper"]')
 
@@ -130,7 +145,9 @@ test.describe('Basic assertions', () => {
     // Wait for events to fire
     await page.waitForTimeout(100)
 
-    const startLog = consoleLogs.find((l) => l.includes('user interaction started'))
+    const startLog = consoleLogs.find((l) =>
+      l.includes('user interaction started')
+    )
     const endLog = consoleLogs.find((l) => l.includes('user interaction ended'))
     expect(startLog).toBeDefined()
     expect(startLog).toContain('keyboard')
@@ -138,7 +155,9 @@ test.describe('Basic assertions', () => {
     expect(endLog).toContain('keyboard')
   })
 
-  test('should debounce cropComplete during a burst of window resizes', async ({ page }) => {
+  test('should debounce cropComplete during a burst of window resizes', async ({
+    page,
+  }) => {
     // Install fake timers to control setTimeout
     await page.clock.install()
 

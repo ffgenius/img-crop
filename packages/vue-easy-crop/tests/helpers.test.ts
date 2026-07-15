@@ -1,4 +1,5 @@
-import { describe, expect, test } from 'vitest'
+import { describe, expect, test } from 'vite-plus/test'
+
 import * as helpers from '../src/helpers'
 
 describe('Helpers', () => {
@@ -132,73 +133,188 @@ describe('Helpers', () => {
   describe('computeCroppedArea', () => {
     test('should compute the correct areas when the media was not moved and not zoomed', () => {
       const crop = { x: 0, y: 0 }
-      const imgSize = { width: 1000, height: 600, naturalWidth: 2000, naturalHeight: 1200 }
+      const imgSize = {
+        width: 1000,
+        height: 600,
+        naturalWidth: 2000,
+        naturalHeight: 1200,
+      }
       const cropSize = { width: 1000, height: 600 }
       const aspect = 5 / 3
       const zoom = 1
-      const areas = helpers.computeCroppedArea(crop, imgSize, cropSize, aspect, zoom)
-      expect(areas.croppedAreaPercentages).toEqual({ x: 0, y: 0, width: 100, height: 100 })
-      expect(areas.croppedAreaPixels).toEqual({ height: 1200, width: 2000, x: 0, y: 0 })
+      const areas = helpers.computeCroppedArea(
+        crop,
+        imgSize,
+        cropSize,
+        aspect,
+        zoom
+      )
+      expect(areas.croppedAreaPercentages).toEqual({
+        x: 0,
+        y: 0,
+        width: 100,
+        height: 100,
+      })
+      expect(areas.croppedAreaPixels).toEqual({
+        height: 1200,
+        width: 2000,
+        x: 0,
+        y: 0,
+      })
     })
 
     test('should compute the correct areas when the media was moved but not zoomed', () => {
       const crop = { x: 50, y: 0 }
-      const imgSize = { width: 1000, height: 600, naturalWidth: 2000, naturalHeight: 1200 }
+      const imgSize = {
+        width: 1000,
+        height: 600,
+        naturalWidth: 2000,
+        naturalHeight: 1200,
+      }
       const cropSize = { width: 800, height: 600 }
       const aspect = 4 / 3
       const zoom = 1
-      const areas = helpers.computeCroppedArea(crop, imgSize, cropSize, aspect, zoom)
-      expect(areas.croppedAreaPercentages).toEqual({ height: 100, width: 80, x: 5, y: 0 })
-      expect(areas.croppedAreaPixels).toEqual({ height: 1200, width: 1600, x: 100, y: 0 })
+      const areas = helpers.computeCroppedArea(
+        crop,
+        imgSize,
+        cropSize,
+        aspect,
+        zoom
+      )
+      expect(areas.croppedAreaPercentages).toEqual({
+        height: 100,
+        width: 80,
+        x: 5,
+        y: 0,
+      })
+      expect(areas.croppedAreaPixels).toEqual({
+        height: 1200,
+        width: 1600,
+        x: 100,
+        y: 0,
+      })
     })
 
     test('should compute the correct areas when there is a zoom', () => {
       const crop = { x: 0, y: 0 }
-      const imgSize = { width: 1000, height: 600, naturalWidth: 2000, naturalHeight: 1200 }
+      const imgSize = {
+        width: 1000,
+        height: 600,
+        naturalWidth: 2000,
+        naturalHeight: 1200,
+      }
       const cropSize = { width: 1000, height: 600 }
       const aspect = 5 / 3
       const zoom = 2
-      const areas = helpers.computeCroppedArea(crop, imgSize, cropSize, aspect, zoom)
-      expect(areas.croppedAreaPercentages).toEqual({ height: 50, width: 50, x: 25, y: 25 })
-      expect(areas.croppedAreaPixels).toEqual({ height: 600, width: 1000, x: 500, y: 300 })
+      const areas = helpers.computeCroppedArea(
+        crop,
+        imgSize,
+        cropSize,
+        aspect,
+        zoom
+      )
+      expect(areas.croppedAreaPercentages).toEqual({
+        height: 50,
+        width: 50,
+        x: 25,
+        y: 25,
+      })
+      expect(areas.croppedAreaPixels).toEqual({
+        height: 600,
+        width: 1000,
+        x: 500,
+        y: 300,
+      })
     })
 
     test('should not limit the position within media bounds when restrictPosition is false', () => {
       const crop = { x: 1000, y: 600 }
-      const imgSize = { width: 1000, height: 600, naturalWidth: 2000, naturalHeight: 1200 }
+      const imgSize = {
+        width: 1000,
+        height: 600,
+        naturalWidth: 2000,
+        naturalHeight: 1200,
+      }
       const cropSize = { width: 1000, height: 600 }
       const aspect = 5 / 3
       const zoom = 1
-      const areas = helpers.computeCroppedArea(crop, imgSize, cropSize, aspect, zoom, 0, false)
-      expect(areas.croppedAreaPercentages).toEqual({ height: 100, width: 100, x: -100, y: -100 })
-      expect(areas.croppedAreaPixels).toEqual({ height: 1200, width: 2000, x: -2000, y: -1200 })
+      const areas = helpers.computeCroppedArea(
+        crop,
+        imgSize,
+        cropSize,
+        aspect,
+        zoom,
+        0,
+        false
+      )
+      expect(areas.croppedAreaPercentages).toEqual({
+        height: 100,
+        width: 100,
+        x: -100,
+        y: -100,
+      })
+      expect(areas.croppedAreaPixels).toEqual({
+        height: 1200,
+        width: 2000,
+        x: -2000,
+        y: -1200,
+      })
     })
 
     test('should compute the correct areas when there is a rotation', () => {
       const crop = { x: 0, y: 0 }
-      const imgSize = { width: 1000, height: 600, naturalWidth: 2000, naturalHeight: 1200 }
+      const imgSize = {
+        width: 1000,
+        height: 600,
+        naturalWidth: 2000,
+        naturalHeight: 1200,
+      }
       const cropSize = { width: 1000, height: 600 }
       const aspect = 5 / 3
       const zoom = 1
       const rotation = 45
-      const areas = helpers.computeCroppedArea(crop, imgSize, cropSize, aspect, zoom, rotation)
+      const areas = helpers.computeCroppedArea(
+        crop,
+        imgSize,
+        cropSize,
+        aspect,
+        zoom,
+        rotation
+      )
       expect(areas.croppedAreaPercentages).toEqual({
         height: 53.03300858899106,
         width: 88.38834764831843,
         x: 5.805826175840782,
         y: 23.48349570550447,
       })
-      expect(areas.croppedAreaPixels).toEqual({ height: 1200, width: 2000, x: 131, y: 531 })
+      expect(areas.croppedAreaPixels).toEqual({
+        height: 1200,
+        width: 2000,
+        x: 131,
+        y: 531,
+      })
     })
 
     test('should compute the correct areas when there is a rotation and the media was moved', () => {
       const crop = { x: 50, y: 0 }
-      const imgSize = { width: 1000, height: 600, naturalWidth: 2000, naturalHeight: 1200 }
+      const imgSize = {
+        width: 1000,
+        height: 600,
+        naturalWidth: 2000,
+        naturalHeight: 1200,
+      }
       const cropSize = { width: 1000, height: 600 }
       const aspect = 5 / 3
       const zoom = 1
       const rotation = 45
-      const areas = helpers.computeCroppedArea(crop, imgSize, cropSize, aspect, zoom, rotation)
+      const areas = helpers.computeCroppedArea(
+        crop,
+        imgSize,
+        cropSize,
+        aspect,
+        zoom,
+        rotation
+      )
 
       expect(areas.croppedAreaPercentages).toEqual({
         height: 53.03300858899106,
@@ -206,14 +322,24 @@ describe('Helpers', () => {
         x: 1.3864087934248597,
         y: 23.48349570550447,
       })
-      expect(areas.croppedAreaPixels).toEqual({ height: 1200, width: 2000, x: 31, y: 531 })
+      expect(areas.croppedAreaPixels).toEqual({
+        height: 1200,
+        width: 2000,
+        x: 31,
+        y: 531,
+      })
     })
   })
 
   describe('getInitialCropFromCroppedAreaPixels', () => {
     test('should compute the correct crop and zoom when the media was not moved and not zoomed', () => {
       const croppedAreaPixels = { height: 1200, width: 2000, x: 0, y: 0 }
-      const imgSize = { width: 1000, height: 600, naturalWidth: 2000, naturalHeight: 1200 }
+      const imgSize = {
+        width: 1000,
+        height: 600,
+        naturalWidth: 2000,
+        naturalHeight: 1200,
+      }
       const cropSize = { height: 600, width: 1000 }
 
       const { crop, zoom } = helpers.getInitialCropFromCroppedAreaPixels(
@@ -231,7 +357,12 @@ describe('Helpers', () => {
 
     test('should compute the correct crop and zoom when the media was moved but not zoomed', () => {
       const croppedAreaPixels = { height: 1200, width: 1600, x: 100, y: 0 }
-      const imgSize = { width: 1000, height: 600, naturalWidth: 2000, naturalHeight: 1200 }
+      const imgSize = {
+        width: 1000,
+        height: 600,
+        naturalWidth: 2000,
+        naturalHeight: 1200,
+      }
       const cropSize = { width: 800, height: 600 }
 
       const { crop, zoom } = helpers.getInitialCropFromCroppedAreaPixels(
@@ -249,7 +380,12 @@ describe('Helpers', () => {
 
     test('should compute the correct crop and zoom even when cropSize is used', () => {
       const croppedAreaPixels = { width: 873, height: 873, x: 0, y: 0 }
-      const imgSize = { width: 875, height: 458, naturalWidth: 1910, naturalHeight: 1000 }
+      const imgSize = {
+        width: 875,
+        height: 458,
+        naturalWidth: 1910,
+        naturalHeight: 1000,
+      }
       const cropSize = { width: 400, height: 400 }
 
       const { crop, zoom } = helpers.getInitialCropFromCroppedAreaPixels(
@@ -268,7 +404,12 @@ describe('Helpers', () => {
 
     test('should compute the correct crop and zoom when there is a zoom', () => {
       const croppedAreaPixels = { height: 600, width: 1000, x: 500, y: 300 }
-      const imgSize = { width: 1000, height: 600, naturalWidth: 2000, naturalHeight: 1200 }
+      const imgSize = {
+        width: 1000,
+        height: 600,
+        naturalWidth: 2000,
+        naturalHeight: 1200,
+      }
       const cropSize = { height: 600, width: 1000 }
 
       const { crop, zoom } = helpers.getInitialCropFromCroppedAreaPixels(
@@ -285,8 +426,18 @@ describe('Helpers', () => {
     })
 
     test('should compute the correct crop and zoom even when restrictPosition was false', () => {
-      const croppedAreaPixels = { height: 1200, width: 2000, x: -2000, y: -1200 }
-      const imgSize = { width: 1000, height: 600, naturalWidth: 2000, naturalHeight: 1200 }
+      const croppedAreaPixels = {
+        height: 1200,
+        width: 2000,
+        x: -2000,
+        y: -1200,
+      }
+      const imgSize = {
+        width: 1000,
+        height: 600,
+        naturalWidth: 2000,
+        naturalHeight: 1200,
+      }
       const cropSize = { width: 1000, height: 600 }
 
       const { crop, zoom } = helpers.getInitialCropFromCroppedAreaPixels(

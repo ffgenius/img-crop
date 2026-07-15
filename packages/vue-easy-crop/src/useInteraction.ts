@@ -1,6 +1,9 @@
 import type { Ref } from 'vue'
+
 import normalizeWheel from 'normalize-wheel'
+
 import type { CropperInteractionSource, MediaSize, Point, Size } from './types'
+
 import {
   clamp,
   getCenter,
@@ -106,7 +109,11 @@ export function useInteraction(opts: UseInteractionOptions) {
     }
   }
 
-  function setNewZoom(newZoom: number, point: Point, shouldUpdatePosition = true) {
+  function setNewZoom(
+    newZoom: number,
+    point: Point,
+    shouldUpdatePosition = true
+  ) {
     const cs = cropSize.value
     if (!cs) return
 
@@ -121,7 +128,13 @@ export function useInteraction(opts: UseInteractionOptions) {
       }
 
       const newPosition = restrictPositionRef.value
-        ? restrictPosition(requestedPosition, mediaSize.value, cs, clampedZoom, rotation.value)
+        ? restrictPosition(
+            requestedPosition,
+            mediaSize.value,
+            cs,
+            clampedZoom,
+            rotation.value
+          )
         : requestedPosition
 
       onCropChange(newPosition)
@@ -155,7 +168,13 @@ export function useInteraction(opts: UseInteractionOptions) {
       }
 
       const newPosition = restrictPositionRef.value
-        ? restrictPosition(requestedPosition, mediaSize.value, cs, zoom.value, rotation.value)
+        ? restrictPosition(
+            requestedPosition,
+            mediaSize.value,
+            cs,
+            zoom.value,
+            rotation.value
+          )
         : requestedPosition
 
       onCropChange(newPosition)
@@ -286,7 +305,13 @@ export function useInteraction(opts: UseInteractionOptions) {
   }
 
   function onGestureChange(e: Event) {
-    const ge = e as unknown as { rotation: number; scale: number; clientX: number; clientY: number; preventDefault: () => void }
+    const ge = e as unknown as {
+      rotation: number
+      scale: number
+      clientX: number
+      clientY: number
+      preventDefault: () => void
+    }
     e.preventDefault()
     if (isTouching) return // avoid conflict with touch events
 
@@ -320,15 +345,34 @@ export function useInteraction(opts: UseInteractionOptions) {
     let newCrop = { ...getCrop() }
 
     switch (e.key) {
-      case 'ArrowUp':    newCrop.y -= step; e.preventDefault(); break
-      case 'ArrowDown':  newCrop.y += step; e.preventDefault(); break
-      case 'ArrowLeft':  newCrop.x -= step; e.preventDefault(); break
-      case 'ArrowRight': newCrop.x += step; e.preventDefault(); break
-      default: return
+      case 'ArrowUp':
+        newCrop.y -= step
+        e.preventDefault()
+        break
+      case 'ArrowDown':
+        newCrop.y += step
+        e.preventDefault()
+        break
+      case 'ArrowLeft':
+        newCrop.x -= step
+        e.preventDefault()
+        break
+      case 'ArrowRight':
+        newCrop.x += step
+        e.preventDefault()
+        break
+      default:
+        return
     }
 
     if (restrictPositionRef.value) {
-      newCrop = restrictPosition(newCrop, mediaSize.value, cs, zoom.value, rotation.value)
+      newCrop = restrictPosition(
+        newCrop,
+        mediaSize.value,
+        cs,
+        zoom.value,
+        rotation.value
+      )
     }
 
     if (!e.repeat) {
@@ -346,7 +390,8 @@ export function useInteraction(opts: UseInteractionOptions) {
       case 'ArrowRight':
         e.preventDefault()
         break
-      default: return
+      default:
+        return
     }
     onEmitCropData()
     onInteractionEnd('keyboard')
@@ -377,9 +422,18 @@ export function useInteraction(opts: UseInteractionOptions) {
 
   function cleanup() {
     cleanupDocumentEvents()
-    if (rafDragTimeout) { cancelAnimationFrame(rafDragTimeout); rafDragTimeout = null }
-    if (rafPinchTimeout) { cancelAnimationFrame(rafPinchTimeout); rafPinchTimeout = null }
-    if (wheelTimer) { clearTimeout(wheelTimer); wheelTimer = null }
+    if (rafDragTimeout) {
+      cancelAnimationFrame(rafDragTimeout)
+      rafDragTimeout = null
+    }
+    if (rafPinchTimeout) {
+      cancelAnimationFrame(rafPinchTimeout)
+      rafPinchTimeout = null
+    }
+    if (wheelTimer) {
+      clearTimeout(wheelTimer)
+      wheelTimer = null
+    }
   }
 
   return {

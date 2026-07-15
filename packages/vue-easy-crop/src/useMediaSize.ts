@@ -1,5 +1,7 @@
 import { type Ref, shallowRef, ref } from 'vue'
+
 import type { MediaSize, Point, Size } from './types'
+
 import { getCropSize } from './helpers'
 
 const RESIZE_EMIT_DEBOUNCE_TIME = 250
@@ -10,16 +12,35 @@ export interface UseMediaSizeOptions {
   videoRef: Ref<HTMLVideoElement | null>
   aspect: () => number
   rotation: () => number
-  objectFit: () => 'contain' | 'cover' | 'horizontal-cover' | 'vertical-cover' | undefined
+  objectFit: () =>
+    | 'contain'
+    | 'cover'
+    | 'horizontal-cover'
+    | 'vertical-cover'
+    | undefined
   cropSizeProp: () => Size | undefined
   /** Called when the computed crop size changes (replaces setCropSize callback) */
   onCropSizeChange?: (cropSize: Size) => void
 }
 
 export function useMediaSize(opts: UseMediaSizeOptions) {
-  const { containerRef, imageRef, videoRef, aspect, rotation, objectFit, cropSizeProp, onCropSizeChange } = opts
+  const {
+    containerRef,
+    imageRef,
+    videoRef,
+    aspect,
+    rotation,
+    objectFit,
+    cropSizeProp,
+    onCropSizeChange,
+  } = opts
 
-  const mediaSize = shallowRef<MediaSize>({ width: 0, height: 0, naturalWidth: 0, naturalHeight: 0 })
+  const mediaSize = shallowRef<MediaSize>({
+    width: 0,
+    height: 0,
+    naturalWidth: 0,
+    naturalHeight: 0,
+  })
   const cropSize = shallowRef<Size | null>(null)
   const mediaObjectFit = ref<string | undefined>(undefined)
   const containerRect = shallowRef<DOMRect | null>(null)
@@ -49,10 +70,14 @@ export function useMediaSize(opts: UseMediaSizeOptions) {
         const rect = container.getBoundingClientRect()
         containerRect.value = rect
         const containerAspect = rect.width / rect.height
-        const nw = imageRef.value?.naturalWidth || videoRef.value?.videoWidth || 0
-        const nh = imageRef.value?.naturalHeight || videoRef.value?.videoHeight || 0
+        const nw =
+          imageRef.value?.naturalWidth || videoRef.value?.videoWidth || 0
+        const nh =
+          imageRef.value?.naturalHeight || videoRef.value?.videoHeight || 0
         const mediaAspect = nw / nh
-        return mediaAspect < containerAspect ? 'horizontal-cover' : 'vertical-cover'
+        return mediaAspect < containerAspect
+          ? 'horizontal-cover'
+          : 'vertical-cover'
       }
       return 'horizontal-cover'
     }
@@ -74,9 +99,12 @@ export function useMediaSize(opts: UseMediaSizeOptions) {
     saveContainerPosition()
 
     const containerAspect = rect.width / rect.height
-    const naturalWidth = imageRef.value?.naturalWidth || videoRef.value?.videoWidth || 0
-    const naturalHeight = imageRef.value?.naturalHeight || videoRef.value?.videoHeight || 0
-    const isMediaScaledDown = mediaEl.offsetWidth < naturalWidth || mediaEl.offsetHeight < naturalHeight
+    const naturalWidth =
+      imageRef.value?.naturalWidth || videoRef.value?.videoWidth || 0
+    const naturalHeight =
+      imageRef.value?.naturalHeight || videoRef.value?.videoHeight || 0
+    const isMediaScaledDown =
+      mediaEl.offsetWidth < naturalWidth || mediaEl.offsetHeight < naturalHeight
     const mediaAspect = naturalWidth / naturalHeight
 
     let renderedMediaSize: Size
@@ -90,22 +118,42 @@ export function useMediaSize(opts: UseMediaSizeOptions) {
               : { width: rect.width, height: rect.width / mediaAspect }
           break
         case 'horizontal-cover':
-          renderedMediaSize = { width: rect.width, height: rect.width / mediaAspect }
+          renderedMediaSize = {
+            width: rect.width,
+            height: rect.width / mediaAspect,
+          }
           break
         case 'vertical-cover':
-          renderedMediaSize = { width: rect.height * mediaAspect, height: rect.height }
+          renderedMediaSize = {
+            width: rect.height * mediaAspect,
+            height: rect.height,
+          }
           break
       }
     } else {
-      renderedMediaSize = { width: mediaEl.offsetWidth, height: mediaEl.offsetHeight }
+      renderedMediaSize = {
+        width: mediaEl.offsetWidth,
+        height: mediaEl.offsetHeight,
+      }
     }
 
-    const newMediaSize: MediaSize = { ...renderedMediaSize, naturalWidth, naturalHeight }
+    const newMediaSize: MediaSize = {
+      ...renderedMediaSize,
+      naturalWidth,
+      naturalHeight,
+    }
     mediaSize.value = newMediaSize
 
     const newCropSize = cropSizeProp()
       ? cropSizeProp()!
-      : getCropSize(newMediaSize.width, newMediaSize.height, rect.width, rect.height, aspect(), rotation())
+      : getCropSize(
+          newMediaSize.width,
+          newMediaSize.height,
+          rect.width,
+          rect.height,
+          aspect(),
+          rotation()
+        )
 
     if (
       !cropSize.value ||
@@ -116,7 +164,12 @@ export function useMediaSize(opts: UseMediaSizeOptions) {
     }
 
     cropSize.value = newCropSize
-    return { newMediaSize, newCropSize, containerWidth: rect.width, containerHeight: rect.height }
+    return {
+      newMediaSize,
+      newCropSize,
+      containerWidth: rect.width,
+      containerHeight: rect.height,
+    }
   }
 
   /** Called when image/video finishes loading */
@@ -130,7 +183,10 @@ export function useMediaSize(opts: UseMediaSizeOptions) {
     if (typeof ResizeObserver === 'undefined' || !containerRef.value) return
     let isFirstResize = true
     resizeObserver = new ResizeObserver(() => {
-      if (isFirstResize) { isFirstResize = false; return }
+      if (isFirstResize) {
+        isFirstResize = false
+        return
+      }
       onResize()
     })
     resizeObserver.observe(containerRef.value)

@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test'
+
 import { dragAndDropWithTouch, pinch, rotate } from './helpers'
 
 test.describe('Touch assertions', () => {
@@ -67,34 +68,59 @@ test.describe('Touch assertions', () => {
     expect(endLog).toContain('touch')
   })
 
-  test('Zoom in and out with pinch based on the center between 2 fingers', async ({ page }) => {
+  test('Zoom in and out with pinch based on the center between 2 fingers', async ({
+    page,
+  }) => {
     // Dispatch pinch at a specific position using page.evaluate
     await page.evaluate(() => {
-      function _ct(target: Element, clientX: number, clientY: number, identifier: number): Touch {
+      function _ct(
+        target: Element,
+        clientX: number,
+        clientY: number,
+        identifier: number
+      ): Touch {
         return new Touch({
-          identifier, target, clientX, clientY,
-          pageX: clientX, pageY: clientY,
-          screenX: clientX, screenY: clientY,
-          radiusX: 1, radiusY: 1, rotationAngle: 0, force: 1,
+          identifier,
+          target,
+          clientX,
+          clientY,
+          pageX: clientX,
+          pageY: clientY,
+          screenX: clientX,
+          screenY: clientY,
+          radiusX: 1,
+          radiusY: 1,
+          rotationAngle: 0,
+          force: 1,
         })
       }
       const el = document.querySelector('[data-testid="container"]')
       if (!el) throw new Error('Container not found')
 
-      el.dispatchEvent(new TouchEvent('touchstart', {
-        touches: [_ct(el, 500, 200, 0), _ct(el, 500, 300, 1)],
-        changedTouches: [_ct(el, 500, 200, 0), _ct(el, 500, 300, 1)],
-        bubbles: true, cancelable: true,
-      }))
-      el.dispatchEvent(new TouchEvent('touchmove', {
-        touches: [_ct(el, 500, 200, 0), _ct(el, 500, 310, 1)],
-        changedTouches: [_ct(el, 500, 200, 0), _ct(el, 500, 310, 1)],
-        bubbles: true, cancelable: true,
-      }))
-      el.dispatchEvent(new TouchEvent('touchend', {
-        touches: [], changedTouches: [],
-        bubbles: true, cancelable: true,
-      }))
+      el.dispatchEvent(
+        new TouchEvent('touchstart', {
+          touches: [_ct(el, 500, 200, 0), _ct(el, 500, 300, 1)],
+          changedTouches: [_ct(el, 500, 200, 0), _ct(el, 500, 300, 1)],
+          bubbles: true,
+          cancelable: true,
+        })
+      )
+      el.dispatchEvent(
+        new TouchEvent('touchmove', {
+          touches: [_ct(el, 500, 200, 0), _ct(el, 500, 310, 1)],
+          changedTouches: [_ct(el, 500, 200, 0), _ct(el, 500, 310, 1)],
+          bubbles: true,
+          cancelable: true,
+        })
+      )
+      el.dispatchEvent(
+        new TouchEvent('touchend', {
+          touches: [],
+          changedTouches: [],
+          bubbles: true,
+          cancelable: true,
+        })
+      )
     })
 
     const cropper = page.locator('[data-testid="cropper"]')
@@ -102,62 +128,110 @@ test.describe('Touch assertions', () => {
 
     // Zoom out at different position
     await page.evaluate(() => {
-      function _ct(target: Element, clientX: number, clientY: number, identifier: number): Touch {
+      function _ct(
+        target: Element,
+        clientX: number,
+        clientY: number,
+        identifier: number
+      ): Touch {
         return new Touch({
-          identifier, target, clientX, clientY,
-          pageX: clientX, pageY: clientY,
-          screenX: clientX, screenY: clientY,
-          radiusX: 1, radiusY: 1, rotationAngle: 0, force: 1,
+          identifier,
+          target,
+          clientX,
+          clientY,
+          pageX: clientX,
+          pageY: clientY,
+          screenX: clientX,
+          screenY: clientY,
+          radiusX: 1,
+          radiusY: 1,
+          rotationAngle: 0,
+          force: 1,
         })
       }
       const el = document.querySelector('[data-testid="container"]')
       if (!el) throw new Error('Container not found')
 
-      el.dispatchEvent(new TouchEvent('touchstart', {
-        touches: [_ct(el, 100, 50, 0), _ct(el, 200, 50, 1)],
-        changedTouches: [_ct(el, 100, 50, 0), _ct(el, 200, 50, 1)],
-        bubbles: true, cancelable: true,
-      }))
-      el.dispatchEvent(new TouchEvent('touchmove', {
-        touches: [_ct(el, 100, 50, 0), _ct(el, 190, 50, 1)],
-        changedTouches: [_ct(el, 100, 50, 0), _ct(el, 190, 50, 1)],
-        bubbles: true, cancelable: true,
-      }))
-      el.dispatchEvent(new TouchEvent('touchend', {
-        touches: [], changedTouches: [],
-        bubbles: true, cancelable: true,
-      }))
+      el.dispatchEvent(
+        new TouchEvent('touchstart', {
+          touches: [_ct(el, 100, 50, 0), _ct(el, 200, 50, 1)],
+          changedTouches: [_ct(el, 100, 50, 0), _ct(el, 200, 50, 1)],
+          bubbles: true,
+          cancelable: true,
+        })
+      )
+      el.dispatchEvent(
+        new TouchEvent('touchmove', {
+          touches: [_ct(el, 100, 50, 0), _ct(el, 190, 50, 1)],
+          changedTouches: [_ct(el, 100, 50, 0), _ct(el, 190, 50, 1)],
+          bubbles: true,
+          cancelable: true,
+        })
+      )
+      el.dispatchEvent(
+        new TouchEvent('touchend', {
+          touches: [],
+          changedTouches: [],
+          bubbles: true,
+          cancelable: true,
+        })
+      )
     })
   })
 
-  test('Move image with pinch based on the center between 2 fingers', async ({ page }) => {
+  test('Move image with pinch based on the center between 2 fingers', async ({
+    page,
+  }) => {
     await page.evaluate(() => {
-      function _ct(target: Element, clientX: number, clientY: number, identifier: number): Touch {
+      function _ct(
+        target: Element,
+        clientX: number,
+        clientY: number,
+        identifier: number
+      ): Touch {
         return new Touch({
-          identifier, target, clientX, clientY,
-          pageX: clientX, pageY: clientY,
-          screenX: clientX, screenY: clientY,
-          radiusX: 1, radiusY: 1, rotationAngle: 0, force: 1,
+          identifier,
+          target,
+          clientX,
+          clientY,
+          pageX: clientX,
+          pageY: clientY,
+          screenX: clientX,
+          screenY: clientY,
+          radiusX: 1,
+          radiusY: 1,
+          rotationAngle: 0,
+          force: 1,
         })
       }
       const el = document.querySelector('[data-testid="container"]')
       if (!el) throw new Error('Container not found')
 
       // Two fingers moving together to the right
-      el.dispatchEvent(new TouchEvent('touchstart', {
-        touches: [_ct(el, 500, 200, 0), _ct(el, 600, 300, 1)],
-        changedTouches: [_ct(el, 500, 200, 0), _ct(el, 600, 300, 1)],
-        bubbles: true, cancelable: true,
-      }))
-      el.dispatchEvent(new TouchEvent('touchmove', {
-        touches: [_ct(el, 600, 200, 0), _ct(el, 700, 300, 1)],
-        changedTouches: [_ct(el, 600, 200, 0), _ct(el, 700, 300, 1)],
-        bubbles: true, cancelable: true,
-      }))
-      el.dispatchEvent(new TouchEvent('touchend', {
-        touches: [], changedTouches: [],
-        bubbles: true, cancelable: true,
-      }))
+      el.dispatchEvent(
+        new TouchEvent('touchstart', {
+          touches: [_ct(el, 500, 200, 0), _ct(el, 600, 300, 1)],
+          changedTouches: [_ct(el, 500, 200, 0), _ct(el, 600, 300, 1)],
+          bubbles: true,
+          cancelable: true,
+        })
+      )
+      el.dispatchEvent(
+        new TouchEvent('touchmove', {
+          touches: [_ct(el, 600, 200, 0), _ct(el, 700, 300, 1)],
+          changedTouches: [_ct(el, 600, 200, 0), _ct(el, 700, 300, 1)],
+          bubbles: true,
+          cancelable: true,
+        })
+      )
+      el.dispatchEvent(
+        new TouchEvent('touchend', {
+          touches: [],
+          changedTouches: [],
+          bubbles: true,
+          cancelable: true,
+        })
+      )
     })
 
     const cropper = page.locator('[data-testid="cropper"]')
