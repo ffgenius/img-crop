@@ -27,7 +27,6 @@
     "turbo": "catalog:tooling",
     "typescript": "catalog:tooling",
     "vite-plus": "catalog:tooling",
-    "vitest": "catalog:testing",
     "vue-tsc": "catalog:vue"
   },
   "simple-git-hooks": {
