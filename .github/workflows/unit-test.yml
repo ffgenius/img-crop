@@ -82,10 +82,10 @@ jobs:
         run: pnpm install
 
       - name: Install Chromium
-        run: pnpm --filter vue-easy-crop exec playwright install chromium
+        run: pnpm --filter '@antdv-next/vue-easy-crop' exec playwright install chromium
 
       - name: Build
         run: pnpm run build
 
       - name: E2E Test
-        run: pnpm --filter vue-easy-crop test:e2e
+        run: pnpm --filter '@antdv-next/vue-easy-crop' test:e2e

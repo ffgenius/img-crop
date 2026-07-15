@@ -1,4 +1,4 @@
-import type { Area } from 'vue-easy-crop'
+import type { Area } from '@antdv-next/vue-easy-crop'
 
 import { Upload } from 'antdv-next'
 
