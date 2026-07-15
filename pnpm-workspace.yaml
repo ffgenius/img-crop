@@ -8,7 +8,6 @@ catalogs:
   testing:
     '@playwright/test': ^1.61.1
     playwright: ^1.61.1
-    vitest: npm:@voidzero-dev/vite-plus-test@latest
   tooling:
     antdv-next: ^1.4.3
     normalize-wheel: ^1.0.1
@@ -29,7 +28,6 @@ catalogs:
     vue-tsc: ^3.3.2
 overrides:
   vite: 'catalog:tooling'
-  vitest: 'catalog:testing'
 peerDependencyRules:
   allowAny:
     - vite
