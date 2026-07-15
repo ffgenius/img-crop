@@ -64,14 +64,16 @@ test.describe('Mouse assertions', () => {
     const cy = box.y + box.height / 2
 
     // Zoom in (deltaY negative)
-    await page.mouse.wheel(cx, cy, 0, -100)
+    await page.mouse.move(cx, cy)
+    await page.mouse.wheel(0, -100)
 
     const startLog = consoleLogs.find((l) => l.includes('started'))
     expect(startLog).toBeDefined()
     expect(startLog).toContain('wheel')
 
     // Zoom out (deltaY positive)
-    await page.mouse.wheel(cx, cy, 0, 50)
+    await page.mouse.move(cx, cy)
+    await page.mouse.wheel(0, 50)
   })
 
   test('Mouse wheel should zoom in and out following the pointer', async ({
@@ -82,12 +84,14 @@ test.describe('Mouse assertions', () => {
     if (!box) throw new Error('Container not visible')
 
     // Zoom in at top-left
-    await page.mouse.wheel(box.x, box.y, 0, -100)
+    await page.mouse.move(box.x, box.y)
+    await page.mouse.wheel(0, -100)
 
     await page.waitForTimeout(50)
 
     // Zoom out at bottom-right
-    await page.mouse.wheel(box.x + box.width, box.y + box.height, 0, 50)
+    await page.mouse.move(box.x + box.width, box.y + box.height)
+    await page.mouse.wheel(0, 50)
   })
 
   test('Move down and right after zoom', async ({ page }) => {
@@ -99,7 +103,8 @@ test.describe('Mouse assertions', () => {
     const cy = box.y + box.height / 2
 
     // Zoom in
-    await page.mouse.wheel(cx, cy, 0, -100)
+    await page.mouse.move(cx, cy)
+    await page.mouse.wheel(0, -100)
     await page.waitForTimeout(50)
 
     // Drag down and right
@@ -115,7 +120,8 @@ test.describe('Mouse assertions', () => {
     const cy = box.y + box.height / 2
 
     // Zoom in
-    await page.mouse.wheel(cx, cy, 0, -100)
+    await page.mouse.move(cx, cy)
+    await page.mouse.wheel(0, -100)
     await page.waitForTimeout(50)
 
     // Drag up and left
@@ -131,7 +137,8 @@ test.describe('Mouse assertions', () => {
     const cy = box.y + box.height / 2
 
     // Zoom in
-    await page.mouse.wheel(cx, cy, 0, -100)
+    await page.mouse.move(cx, cy)
+    await page.mouse.wheel(0, -100)
     await page.waitForTimeout(50)
 
     // Try to drag too far up
@@ -150,7 +157,8 @@ test.describe('Mouse assertions', () => {
     const cy = box.y + box.height / 2
 
     // Zoom in
-    await page.mouse.wheel(cx, cy, 0, -100)
+    await page.mouse.move(cx, cy)
+    await page.mouse.wheel(0, -100)
     await page.waitForTimeout(50)
 
     // Try to drag too far down
@@ -169,7 +177,8 @@ test.describe('Mouse assertions', () => {
     const cy = box.y + box.height / 2
 
     // Zoom in
-    await page.mouse.wheel(cx, cy, 0, -100)
+    await page.mouse.move(cx, cy)
+    await page.mouse.wheel(0, -100)
     await page.waitForTimeout(50)
 
     // Drag to bottom
@@ -177,7 +186,8 @@ test.describe('Mouse assertions', () => {
     await page.waitForTimeout(50)
 
     // Zoom out
-    await page.mouse.wheel(cx, cy, 0, 100)
+    await page.mouse.move(cx, cy)
+    await page.mouse.wheel(0, 100)
 
     const cropper = page.locator('[data-testid="cropper"]')
     await expect(cropper).toBeVisible()
