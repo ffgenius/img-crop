@@ -22,11 +22,11 @@
   "scripts": {
     "build": "vp pack",
     "dev": "vp pack -w",
-    "test": "vitest run",
-    "test:all": "vitest run && playwright test",
+    "test": "vp test",
+    "test:all": "vp test && playwright test",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "test:watch": "vitest"
+    "test:watch": "vp test --watch"
   },
   "dependencies": {
     "normalize-wheel": "catalog:tooling"
@@ -36,7 +36,6 @@
     "@vitejs/plugin-vue": "catalog:vue",
     "playwright": "catalog:testing",
     "unplugin-vue": "catalog:vue",
-    "vitest": "catalog:testing",
     "vue": "catalog:vue",
     "vue-tsc": "catalog:vue"
   },
