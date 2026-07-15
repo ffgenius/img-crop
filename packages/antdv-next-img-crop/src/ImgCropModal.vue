@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Area, Point } from 'vue-easy-crop'
 
+import { Slider, Button } from 'antdv-next'
 import { ref, watch, shallowRef, onMounted, onUnmounted } from 'vue'
 import { Cropper } from 'vue-easy-crop'
 
@@ -153,7 +154,7 @@ onUnmounted(() => {
       >
         －
       </button>
-      <a-slider
+      <Slider
         :class="`${PREFIX}-slider`"
         :min="minZoom"
         :max="maxZoom"
@@ -182,7 +183,7 @@ onUnmounted(() => {
       >
         ↺
       </button>
-      <a-slider
+      <Slider
         :class="`${PREFIX}-slider`"
         :min="ROTATION_MIN"
         :max="ROTATION_MAX"
@@ -211,7 +212,7 @@ onUnmounted(() => {
       >
         ↕
       </button>
-      <a-slider
+      <Slider
         :class="`${PREFIX}-slider`"
         :min="minAspect"
         :max="maxAspect"
@@ -229,13 +230,13 @@ onUnmounted(() => {
     </section>
 
     <!-- Reset button -->
-    <a-button
-      v-if="showReset && (zoomSlider || rotationSlider || aspectSlider)"
+    <Button
+      v-if="showReset"
       :class="`${PREFIX}-reset-btn`"
       :style="isResetActive ? {} : { opacity: 0.3, pointerEvents: 'none' }"
       @click="onReset"
     >
       {{ resetBtnText }}
-    </a-button>
+    </Button>
   </div>
 </template>
