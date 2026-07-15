@@ -6,4 +6,7 @@ import tsdownConfig from './tsdown.config'
 export default defineConfig({
   plugins: [vue()],
   pack: tsdownConfig,
+  test: {
+    include: ['tests/**'],
+  },
 })
