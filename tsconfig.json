@@ -5,6 +5,9 @@
     "moduleDetection": "force",
     "module": "preserve",
     "moduleResolution": "bundler",
+    "paths": {
+      "vue-easy-crop": ["./packages/vue-easy-crop/src/index.ts"]
+    },
     "resolveJsonModule": true,
     "types": ["node"],
     "strict": true,
