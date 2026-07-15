@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { Area, Point } from 'vue-easy-crop'
+import type { Area, Point } from '@antdv-next/vue-easy-crop'
 
+import Cropper from '@antdv-next/vue-easy-crop'
 import { ref, computed } from 'vue'
-import Cropper from 'vue-easy-crop'
 
 import IframeWrapper from '../IframeWrapper.vue'
 

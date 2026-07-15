@@ -1,5 +1,5 @@
 {
-  "name": "vue-easy-crop",
+  "name": "@antdv-next/vue-easy-crop",
   "version": "1.0.0",
   "description": "A Vue 3 component to crop images/videos with easy interactions",
   "keywords": [

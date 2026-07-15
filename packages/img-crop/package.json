@@ -1,5 +1,5 @@
 {
-  "name": "antdv-next-img-crop",
+  "name": "@antdv-next/img-crop",
   "version": "1.0.0",
   "description": "An image cropper for Ant Design Vue Next Upload",
   "keywords": [
@@ -29,7 +29,7 @@
     "dev": "vp pack -w"
   },
   "dependencies": {
-    "vue-easy-crop": "workspace:*"
+    "@antdv-next/vue-easy-crop": "workspace:*"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "catalog:vue",

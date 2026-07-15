@@ -87,14 +87,14 @@ importers:
         specifier: catalog:vue
         version: 3.3.2(typescript@6.0.3)
 
-  packages/antdv-next-img-crop:
+  packages/img-crop:
     dependencies:
-      antdv-next:
-        specifier: '*'
-        version: 1.4.2(vue@3.5.35(typescript@6.0.3))
-      vue-easy-crop:
+      '@antdv-next/vue-easy-crop':
         specifier: workspace:*
         version: link:../vue-easy-crop
+      antdv-next:
+        specifier: '*'
+        version: 1.4.3(vue@3.5.35(typescript@6.0.3))
     devDependencies:
       '@vitejs/plugin-vue':
         specifier: catalog:vue
@@ -136,18 +136,18 @@ importers:
 
   playground:
     dependencies:
+      '@antdv-next/img-crop':
+        specifier: workspace:*
+        version: link:../packages/img-crop
+      '@antdv-next/vue-easy-crop':
+        specifier: workspace:*
+        version: link:../packages/vue-easy-crop
       antdv-next:
         specifier: catalog:tooling
         version: 1.4.3(vue@3.5.35(typescript@6.0.3))
-      antdv-next-img-crop:
-        specifier: workspace:*
-        version: link:../packages/antdv-next-img-crop
       vue:
         specifier: catalog:vue
         version: 3.5.35(typescript@6.0.3)
-      vue-easy-crop:
-        specifier: workspace:*
-        version: link:../packages/vue-easy-crop
       vue-router:
         specifier: catalog:vue
         version: 5.1.0(@vue/compiler-sfc@3.5.35)(esbuild@0.27.3)(rolldown@1.1.5)(vite@8.0.0-beta.16(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@26.0.1)(esbuild@0.27.3)(tsx@4.22.3)(yaml@2.9.0))(vue@3.5.35(typescript@6.0.3))
@@ -1735,9 +1735,6 @@ packages:
   ansi-styles@5.2.0:
     resolution: {integrity: sha512-Cxwpt2SfTzTtXcfOlzGEee8O+c+MmUgGrNiBcXnuWxuFJHe6a5Hz7qwhwe5OgaSYI0IJvkLqWX1ASG+cJOkEiA==}
     engines: {node: '>=10'}
-
-  antdv-next@1.4.2:
-    resolution: {integrity: sha512-3hVPjxjuRN8gHQnmaZgPs5PYrwlkmX7pDDMdsrb1NUGdrF8qvUp4vpFb1B+eGkJRjfWKG1xxyyHw7jQsE8xprw==}
 
   antdv-next@1.4.3:
     resolution: {integrity: sha512-pBffLCX83EJpElzD/IkWgzELU8BdtcsT2TzzVD0sc5Rc4JMwN/7ZGpU6I9O5HInvAuTD3uMUNtSCclKmESUN4A==}
@@ -3533,61 +3530,6 @@ snapshots:
   ansi-regex@5.0.1: {}
 
   ansi-styles@5.2.0: {}
-
-  antdv-next@1.4.2(vue@3.5.35(typescript@6.0.3)):
-    dependencies:
-      '@ant-design/colors': 8.0.1
-      '@ant-design/fast-color': 3.0.1
-      '@antdv-next/cssinjs': 1.0.6(vue@3.5.35(typescript@6.0.3))
-      '@antdv-next/icons': 1.1.1(vue@3.5.35(typescript@6.0.3))
-      '@v-c/async-validator': 1.0.1
-      '@v-c/cascader': 1.1.2(vue@3.5.35(typescript@6.0.3))
-      '@v-c/checkbox': 1.0.1(vue@3.5.35(typescript@6.0.3))
-      '@v-c/collapse': 1.0.1(vue@3.5.35(typescript@6.0.3))
-      '@v-c/color-picker': 1.0.6(vue@3.5.35(typescript@6.0.3))
-      '@v-c/dialog': 1.2.0(vue@3.5.35(typescript@6.0.3))
-      '@v-c/drawer': 1.0.6(vue@3.5.35(typescript@6.0.3))
-      '@v-c/dropdown': 1.0.4(vue@3.5.35(typescript@6.0.3))
-      '@v-c/image': 1.0.12(vue@3.5.35(typescript@6.0.3))
-      '@v-c/input': 1.1.1(vue@3.5.35(typescript@6.0.3))
-      '@v-c/input-number': 1.0.6(vue@3.5.35(typescript@6.0.3))
-      '@v-c/mentions': 1.1.3(vue@3.5.35(typescript@6.0.3))
-      '@v-c/menu': 1.2.2(vue@3.5.35(typescript@6.0.3))
-      '@v-c/mutate-observer': 1.0.2(vue@3.5.35(typescript@6.0.3))
-      '@v-c/notification': 2.0.2(vue@3.5.35(typescript@6.0.3))
-      '@v-c/pagination': 1.0.1(vue@3.5.35(typescript@6.0.3))
-      '@v-c/picker': 1.2.2(dayjs@1.11.21)(vue@3.5.35(typescript@6.0.3))
-      '@v-c/progress': 1.0.1(vue@3.5.35(typescript@6.0.3))
-      '@v-c/qrcode': 1.0.1(vue@3.5.35(typescript@6.0.3))
-      '@v-c/rate': 1.0.1(vue@3.5.35(typescript@6.0.3))
-      '@v-c/resize-observer': 1.1.3(vue@3.5.35(typescript@6.0.3))
-      '@v-c/segmented': 1.0.3(vue@3.5.35(typescript@6.0.3))
-      '@v-c/select': 1.1.4(vue@3.5.35(typescript@6.0.3))
-      '@v-c/slick': 1.0.2(vue@3.5.35(typescript@6.0.3))
-      '@v-c/slider': 1.1.0(vue@3.5.35(typescript@6.0.3))
-      '@v-c/steps': 1.0.0(vue@3.5.35(typescript@6.0.3))
-      '@v-c/switch': 1.0.1(vue@3.5.35(typescript@6.0.3))
-      '@v-c/table': 1.1.8(vue@3.5.35(typescript@6.0.3))
-      '@v-c/tabs': 1.2.1(vue@3.5.35(typescript@6.0.3))
-      '@v-c/textarea': 1.1.0(vue@3.5.35(typescript@6.0.3))
-      '@v-c/tooltip': 1.0.4(vue@3.5.35(typescript@6.0.3))
-      '@v-c/tour': 1.1.1(vue@3.5.35(typescript@6.0.3))
-      '@v-c/tree': 1.1.1(vue@3.5.35(typescript@6.0.3))
-      '@v-c/tree-select': 1.1.1(vue@3.5.35(typescript@6.0.3))
-      '@v-c/trigger': 1.0.18(vue@3.5.35(typescript@6.0.3))
-      '@v-c/upload': 1.0.0(vue@3.5.35(typescript@6.0.3))
-      '@v-c/util': 1.0.21(vue@3.5.35(typescript@6.0.3))
-      '@v-c/virtual-list': 1.1.0(vue@3.5.35(typescript@6.0.3))
-      '@vueuse/core': 14.3.0(vue@3.5.35(typescript@6.0.3))
-      dayjs: 1.11.21
-      es-toolkit: 1.49.0
-      scroll-into-view-if-needed: 3.1.0
-      throttle-debounce: 5.0.2
-    transitivePeerDependencies:
-      - date-fns
-      - luxon
-      - moment
-      - vue
 
   antdv-next@1.4.3(vue@3.5.35(typescript@6.0.3)):
     dependencies:

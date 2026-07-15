@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import { ImgCrop } from '@antdv-next/img-crop'
 import { Upload, Button } from 'antdv-next'
-import { ImgCrop } from 'antdv-next-img-crop'
 import { ref } from 'vue'
 
 // --- Demo configuration ---
